@@ -5,7 +5,7 @@
 -- Dumped from database version 13.5 (Ubuntu 13.5-2.pgdg20.04+1)
 -- Dumped by pg_dump version 13.3
 
--- Started on 2022-01-12 00:49:57
+-- Started on 2022-01-12 01:17:27
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -192,7 +192,8 @@ CREATE TABLE public.pings (
     "timestamp" timestamp without time zone DEFAULT now() NOT NULL,
     trackerid integer NOT NULL,
     stationid integer NOT NULL,
-    location point NOT NULL
+    location point NOT NULL,
+    velocity real
 );
 
 
@@ -574,7 +575,7 @@ ALTER TABLE ONLY public.trackers
     ADD CONSTRAINT trackers_fk FOREIGN KEY (animalid) REFERENCES public.animals(animalid);
 
 
--- Completed on 2022-01-12 00:50:05
+-- Completed on 2022-01-12 01:17:35
 
 --
 -- PostgreSQL database dump complete
