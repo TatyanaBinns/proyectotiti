@@ -1,6 +1,5 @@
-const express = require('express');
-const pgURIParsr = require('pg-connection-string').parse;
-const { Client } = require('pg').native;
+const express = require('express')
+const { Client } = require('pg');
 
 
 let port = process.env.PORT;
@@ -14,12 +13,15 @@ if (uri == null || uri == "")
 
 dbApi = {};
 async function dbInit(){
-    var config = pgURIParsr(uri);
-    config.ssl = true;
-    const client = new Client(config);
+    const client = new Client({
+        connectionString: uri,
+        ssl: { 
+            rejectUnauthorized: false 
+        }
+    });
     console.log("Connecting to database...");
     await client.connect();
-    Console.log("Conneciton complete! Initializing api...");
+    console.log("Connection complete! Initializing api...");
     
     dbApi.now = () => client.query('SELECT NOW() as now');
     
