@@ -14,10 +14,13 @@ if (uri == null || uri == "")
 dbApi = {};
 async function dbInit(){
     const client = new Client({uri});
+    console.log("Connecting to database...");
     await client.connect();
+    Console.log("Conneciton complete! Initializing api...");
     
     dbApi.now = () => client.query('SELECT NOW() as now');
-
+    
+    console.log("Database API Loaded");
 }
 dbInit().catch(err => console.log(err));
 
