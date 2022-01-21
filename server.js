@@ -1,6 +1,6 @@
-const express = require('express')
+const express = require('express');
 const pgURIParsr = require('pg-connection-string').parse;
-const { Client } = require('pg')
+const { Client } = require('pg').native;
 
 
 let port = process.env.PORT;
