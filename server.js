@@ -27,7 +27,7 @@ async function dbInit(){
         return client.query(query).rows;
     }
     
-    dbApi.now = () => client.query('SELECT NOW() as now');
+    dbApi.now = () => exec('SELECT NOW() as now');
     
     console.log("Database API Loaded");
 }
