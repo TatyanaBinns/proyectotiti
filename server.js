@@ -37,11 +37,9 @@ dbInit().catch(err => console.log(err));
 
 const app = express();
 
-app.get('/', (req, res) => {
-    (async() =>
-        res.send(JSON.stringify(await dbApi.now()))
-    )();
-})
+app.get('/', (req, res) => { (async() =>
+    res.send(JSON.stringify(await dbApi.now()))
+)()});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
