@@ -15,6 +15,7 @@ if (uri == null || uri == "")
 dbApi = {};
 async function dbInit(){
     var config = pgURIParsr(uri);
+    config.ssl = true;
     const client = new Client(config);
     console.log("Connecting to database...");
     await client.connect();
