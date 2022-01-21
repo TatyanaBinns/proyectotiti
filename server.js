@@ -23,6 +23,10 @@ async function dbInit(){
     await client.connect();
     console.log("Connection complete! Initializing api...");
     
+    async function exec(query){
+        return client.query(query).rows;
+    }
+    
     dbApi.now = () => client.query('SELECT NOW() as now');
     
     console.log("Database API Loaded");
