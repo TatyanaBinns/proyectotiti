@@ -13,6 +13,7 @@ if (uri == null || uri == "")
 
 dbApi = {};
 async function dbInit(){
+    console.log("URI: "+uri);
     const client = new Client({uri});
     console.log("Connecting to database...");
     await client.connect();
