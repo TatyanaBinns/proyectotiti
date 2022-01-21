@@ -19,6 +19,7 @@
   "homepage": "https://github.com/TatyanaBinns/proyectotiti#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "pg-connection-string": "^2.5.0"
   }
 }

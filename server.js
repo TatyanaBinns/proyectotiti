@@ -1,4 +1,5 @@
 const express = require('express')
+const pgURIParsr = require('pg-connection-string').parse;
 const { Client } = require('pg')
 
 
@@ -13,8 +14,8 @@ if (uri == null || uri == "")
 
 dbApi = {};
 async function dbInit(){
-    console.log("URI: "+uri);
-    const client = new Client({uri});
+    var config = pgURIParsr(uri);
+    const client = new Client(config);
     console.log("Connecting to database...");
     await client.connect();
     Console.log("Conneciton complete! Initializing api...");
