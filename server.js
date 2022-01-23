@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser =require('body-parser')
 const { Client } = require('pg');
 
 
@@ -58,11 +59,18 @@ dbInit().catch(err => console.log(err));
 
 
 const app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+
 //============ Initialize endpoints ============
 app.get('/', (req, res) => (async() => {
     res.send(JSON.stringify(await dbApi.now()))
 })());
 app.get('/storeping', (req, res) => (async() => {
+    //req.body.    (TODO: need format from ece team.) 
 	var trackerid= 4242, stationid = 42, lat= 28.365349, lon=81.125664, velocity=0.39;
 	await dbApi.ensureStation(stationid);
 	await dbApi.ensureTracker(trackerid);
