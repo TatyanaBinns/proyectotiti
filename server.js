@@ -43,6 +43,8 @@ async function dbInit(){
     dbApi.now = () => exec('SELECT NOW() as now');
     
     dbApi.storeping = (trackerid, stationid, lat, lon, velocity) => exec('INSERT INTO public.pings ("timestamp", trackeruuid, stationuuid, "location", velocity) VALUES(now(), $1, $2, point($3, $4), $5);', [trackerid, stationid, lat, lon, velocity]);
+    
+    dbApi.log = (entry) => exec('INSERT INTO public.logs(entry, "timestamp", uid)VALUES($1, now(), 1);', [entry]);
 
     dbApi.ensureStation = (stationid) => exec("INSERT INTO public.basestations (name, location, description, stationuuid) VALUES('UnknownStation', point(28.600673933160543, -81.19702573512788), 'Unknown Base Station ID#$1', $1) ON CONFLICT DO NOTHING;", [stationid]);
 
@@ -61,23 +63,33 @@ dbInit().catch(err => console.log(err));
 const app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
 
 //============ Initialize endpoints ============
 app.get('/', (req, res) => (async() => {
-    res.send(JSON.stringify(await dbApi.now()))
+    res.send(JSON.stringify(await dbApi.now(), null, 4))
 })());
-app.get('/storeping', (req, res) => (async() => {
+
+var storePing = (req, res) => (async() => {
     //req.body.    (TODO: need format from ece team.) 
+    var logEntry = {
+        raw: req.rawBody,
+        body: req.body,
+        query: req.query
+    };
+    await dbApi.log(JSON.stringify(logEntry, null, 4));
 	var trackerid= 4242, stationid = 42, lat= 28.365349, lon=81.125664, velocity=0.39;
 	await dbApi.ensureStation(stationid);
 	await dbApi.ensureTracker(trackerid);
-    res.send(JSON.stringify(await dbApi.storeping(trackerid, stationid, lat, lon, velocity)))
-})());
+    res.send(JSON.stringify(await dbApi.storeping(trackerid, stationid, lat, lon, velocity), null, 4))
+})();
+app.get('/storeping', storePing);
+app.post('/storeping', storePing);
+
 app.get('/listpings', (req, res) => (async() => {
-    res.send(JSON.stringify(await dbApi.listpings()))
+    res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
 })());
 
 
