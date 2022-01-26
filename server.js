@@ -10,7 +10,7 @@ if (port == null || port == "")
 
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
-  uri = "postgres://postgres:12345@localhost:5432/postgres"; //TODO set an agreed upon local development
+  uri = "postgres://postgres:gorob121513@localhost:5432/postgres"; //TODO set an agreed upon local development
             //alternative
 
 
@@ -95,30 +95,9 @@ app.get('/listpings', (req, res) => (async() => {
     res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
 })());
 
-//====== User Routes ======
-app.post('/register', register = (req, res) => {
-    let { username, password, first_name, last_name } = req.body;
-    if (username && password && first_name && last_name)
-        // if(!dbApi.userNameExists()) {
-        //     try {
-        //         dbApi.addUser(username, password, first_name, last_name);
-        //     }
-        //     catch(e) {
-        //         console.log('An error occurred while trying to register your account.');
-        //         console.log(e);
-        //     }
-        //
-        //     res.sendStatus(200);
-        // };
-        res.send("If the email/username doesn't already exist then add the user.");
-    else res.send("Please fill out all available fields.");
-});
-app.get('/login');
-app.post('/logout');
-
 //====== User Controller Methods ======
 const register = (req, res) => {
-    let { username, password, first_name, last_name } = req.body;
+    const { username, password, first_name, last_name } = req.body;
     if (username && password && first_name && last_name)
         // if(!dbApi.userNameExists()) {
         //     try {
@@ -134,6 +113,11 @@ const register = (req, res) => {
         res.send("If the email/username doesn't already exist then add the user.");
     else res.send("Please fill out all available fields.");
 };
+
+//====== User Routes ======
+app.post('/register', register);
+app.get('/login');
+app.post('/logout');
 
 //====== Start listening on whatever port ======
 app.listen(port, () => {
