@@ -10,7 +10,7 @@ if (port == null || port == "")
 
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
-  uri = ""; //TODO set an agreed upon local development
+  uri = "postgres://postgres:12345@localhost:5432/postgres"; //TODO set an agreed upon local development
             //alternative
 
 
@@ -52,6 +52,9 @@ async function dbInit(){
 
     dbApi.listpings = () => exec('SELECT * FROM pings;');
 
+    dbApi.usernameExists = () => console.log('Please verify the email/username doesn\'t already exist.');
+
+    dbApi.addUser = () => console.log('Please add the user');
 
     console.log("Database API Loaded");
 }
@@ -92,6 +95,45 @@ app.get('/listpings', (req, res) => (async() => {
     res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
 })());
 
+//====== User Routes ======
+app.post('/register', register = (req, res) => {
+    let { username, password, first_name, last_name } = req.body;
+    if (username && password && first_name && last_name)
+        // if(!dbApi.userNameExists()) {
+        //     try {
+        //         dbApi.addUser(username, password, first_name, last_name);
+        //     }
+        //     catch(e) {
+        //         console.log('An error occurred while trying to register your account.');
+        //         console.log(e);
+        //     }
+        //
+        //     res.sendStatus(200);
+        // };
+        res.send("If the email/username doesn't already exist then add the user.");
+    else res.send("Please fill out all available fields.");
+});
+app.get('/login');
+app.post('/logout');
+
+//====== User Controller Methods ======
+const register = (req, res) => {
+    let { username, password, first_name, last_name } = req.body;
+    if (username && password && first_name && last_name)
+        // if(!dbApi.userNameExists()) {
+        //     try {
+        //         dbApi.addUser(username, password, first_name, last_name);
+        //     }
+        //     catch(e) {
+        //         console.log('An error occurred while trying to register your account.');
+        //         console.log(e);
+        //     }
+        //
+        //     res.sendStatus(200);
+        // };
+        res.send("If the email/username doesn't already exist then add the user.");
+    else res.send("Please fill out all available fields.");
+};
 
 //====== Start listening on whatever port ======
 app.listen(port, () => {
