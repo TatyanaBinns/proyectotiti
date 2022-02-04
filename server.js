@@ -56,6 +56,17 @@ async function dbInit(){
 
     dbApi.addUser = () => console.log('Please add the user');
 
+    dbApi.loginUser = () => console.log(
+        'Please add a boolean field for the user to represent whether they are signed in.\n' +
+        'We will update this field whenever the user signs in or signs out.'
+    );
+
+    dbApi.getUserLoggedInValue = () => console.log(
+        'Please check the user table for the boolean field representing whether the user is logged in.'
+    );
+
+    dbApi.getUserByPassword = (hashedPassword) => console.log(`Get the user with the ${hashedPassword}.`);
+
     console.log("Database API Loaded");
 }
 dbInit().catch(err => console.log(err));
@@ -96,12 +107,13 @@ app.get('/listpings', (req, res) => (async() => {
 })());
 
 //====== User Controller Methods ======
-const register = (req, res) => {
+const register = (req, res) => (async() => {
     const { username, password, first_name, last_name } = req.body;
     if (username && password && first_name && last_name)
         // if(!dbApi.userNameExists()) {
         //     try {
-        //         dbApi.addUser(username, password, first_name, last_name);
+        //         let hashedPassword = hashPassword(password);
+        //         dbApi.addUser(username, hashedPassword, first_name, last_name);
         //     }
         //     catch(e) {
         //         console.log('An error occurred while trying to register your account.');
@@ -112,12 +124,61 @@ const register = (req, res) => {
         // };
         res.send("If the email/username doesn't already exist then add the user.");
     else res.send("Please fill out all available fields.");
-};
+});
+
+const login = (req, res) => (async() => {
+    const { username, password } = req.body;
+    if (username && password )
+        // if(dbApi.userNameExists()) {
+        //     let hashedPassword = hashPassword(password);
+        //     let dbUser = dbApi.getUserByPassword(hashedPassword);
+        //     if(dbUser === username) {
+        //         try {
+        //             dbApi.loginUser(username, hashedPassword);
+        //         }
+        //         catch(e) {
+        //             console.log('An error occurred while trying to login to your account.');
+        //             console.log(e);
+        //         }
+        //         res.sendStatus(200);
+        //     }
+        // };
+        res.send("If the username already exist then compare the username/passwords and login the user.");
+    else res.send("Please fill out all available fields.");
+});
+
+const logout = (req, res) => (async () => {
+    console.log("Logging out...");
+        // if(dbApi.userNameExists()) {
+        //     let hashedPassword = hashPassword(password);
+        //     try {
+        //         passwordVerification(username, password);
+        //     }
+        //     catch(e) {
+        //         console.log('An error occurred while trying to login to your account.');
+        //         console.log(e);
+        //     }
+        //
+        //     res.sendStatus(200);
+        // };
+});
 
 //====== User Routes ======
 app.post('/register', register);
-app.get('/login');
-app.post('/logout');
+app.get('/login', login);
+app.post('/logout', logout);
+
+
+//======= Admin Routes =======
+
+
+//======= Monkey Data Routes ======
+
+
+//====== Helper Functions ======
+function hashPassword(password) {
+    console.log(password);
+};
 
 //====== Start listening on whatever port ======
 app.listen(port, () => {
