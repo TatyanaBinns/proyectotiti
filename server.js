@@ -10,7 +10,7 @@ if (port == null || port == "")
 
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
-  uri = "postgres://postgres:gorob121513@localhost:5432/postgres"; //TODO set an agreed upon local development
+  uri = ""; //TODO set an agreed upon local development
             //alternative
 
 
