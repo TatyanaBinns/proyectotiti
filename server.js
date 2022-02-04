@@ -67,6 +67,14 @@ async function dbInit(){
 
     dbApi.getUserByPassword = (hashedPassword) => console.log(`Get the user with the ${hashedPassword}.`);
 
+    dbApi.getUsers = () => console.log("Get ALL users from the DB");
+
+    dbApi.updatePassword = (hashedPassword) => console.log(`Update the user's password with the new password: ${hashedPassword}`);
+
+    dbApi.updateUserPermissions = () => console.log("Update the user permissions specified");
+
+    dbApi.deleteUser = (username) => console.log(`Delete the user with username:${username}`);
+
     console.log("Database API Loaded");
 }
 dbInit().catch(err => console.log(err));
@@ -80,6 +88,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
+
 
 //============ Initialize endpoints ============
 app.get('/', (req, res) => (async() => {
@@ -106,10 +115,14 @@ app.get('/listpings', (req, res) => (async() => {
     res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
 })());
 
+
 //====== User Controller Methods ======
 const register = (req, res) => (async() => {
     const { username, password, first_name, last_name } = req.body;
+
+    // Verify all fields were properly filled
     if (username && password && first_name && last_name)
+        // ============== Check if the username is already taken =============== //
         // if(!dbApi.userNameExists()) {
         //     try {
         //         let hashedPassword = hashPassword(password);
@@ -163,22 +176,65 @@ const logout = (req, res) => (async () => {
         // };
 });
 
+const forgotPassword = (req, res) => (async() => {
+    let { email } = req.body, tempPassword = generateTempPassword;
+    dbApi.updatePassword(tempPassword);
+    console.log("Send an email to the user");
+    res.sendStatus(200);
+});
+
+const updatePassword = (req, res) => (async() => {
+    let { password } = req.body;
+    let hashedPassword = hashPassword(password);
+    dbApi.updatePassword(hashedPassword);
+    res.sendStatus(200);
+});
+
+
+//====== User Controller Methods ======
+const getUsers = (req, res) => (async() => {
+    dbApi.getUsers();
+    res.sendStatus(200);
+});
+
+const updateUserPermissions = (req, res) => (async() => {
+    res.send("Update the user permissions if the user is the admin.");
+});
+
+const deleteUser = (req, res) => (async() => {
+    let {username} = req.body;
+    dbApi.deleteUser(username);
+    res.send(`Delete the user with username:${username}`);
+});
+
+
 //====== User Routes ======
 app.post('/register', register);
 app.get('/login', login);
 app.post('/logout', logout);
+app.post('/forgot-password', forgotPassword);
+app.put('/update-password', updatePassword);
 
 
 //======= Admin Routes =======
+app.get('/get-users', getUsers);
+app.put('/update-user-privelages', updateUserPermissions);
+app.delete('delete-user', deleteUser);
 
 
 //======= Monkey Data Routes ======
 
 
+
 //====== Helper Functions ======
+function generateTempPassword() {
+    // Generate a random password
+    return "temporaryPassword";
+}
+
 function hashPassword(password) {
-    console.log(password);
-};
+    console.log(`Hash the password: ${password}`);
+}
 
 //====== Start listening on whatever port ======
 app.listen(port, () => {
