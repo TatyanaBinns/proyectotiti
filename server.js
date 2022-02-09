@@ -52,7 +52,7 @@ async function dbInit(){
 
     dbApi.listpings = () => exec('SELECT * FROM pings;');
 
-    dbApi.usernameExists = (username) => {
+    dbApi.userNameExists = (username) => {
 		return true;
 	}
 
@@ -126,7 +126,7 @@ const register = (req, res) => (async() => {
     const { username, password, first_name, last_name } = req.body;
 
     // Verify all fields were properly filled
-    if (username && password && first_name && last_name) {
+    if (!(username && password && first_name && last_name)) {
 		//============== Check if the username is already taken =============== //
 		if(!dbApi.userNameExists(username)) {
 		    let hashedPassword = hashPassword(password);
@@ -136,10 +136,12 @@ const register = (req, res) => (async() => {
 			} else {
 				res.json({status: "failure"});
 			}
-		};
+		} else {
+            res.json({status: "username exist"});
+        };
 	}
     else res.send("Please fill out all available fields.");
-});
+})();
 
 const login = (req, res) => (async() => {
     const { username, password } = req.body;
@@ -212,6 +214,7 @@ const deleteUser = (req, res) => (async() => {
 
 //====== User Routes ======
 app.post('/register', register);
+app.get('/register', register);
 app.get('/login', login);
 app.post('/logout', logout);
 app.post('/forgot-password', forgotPassword);
