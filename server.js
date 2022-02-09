@@ -10,7 +10,7 @@ if (port == null || port == "")
 
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
-  uri = ""; //TODO set an agreed upon local development
+  uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
             //alternative
 
 
@@ -52,9 +52,14 @@ async function dbInit(){
 
     dbApi.listpings = () => exec('SELECT * FROM pings;');
 
-    dbApi.usernameExists = () => console.log('Please verify the email/username doesn\'t already exist.');
+    dbApi.usernameExists = (username) => {
+		return true;
+	}
 
-    dbApi.addUser = () => console.log('Please add the user');
+    dbApi.addUser = (username, hashedPassword, first_name, last_name) => {
+		console.log(`Adding user: ${username}, with password: ${hashedPassword}, and name:${first_name} ${last_name}`)
+		return true;
+	};
 
     dbApi.loginUser = () => console.log(
         'Please add a boolean field for the user to represent whether they are signed in.\n' +
@@ -121,21 +126,18 @@ const register = (req, res) => (async() => {
     const { username, password, first_name, last_name } = req.body;
 
     // Verify all fields were properly filled
-    if (username && password && first_name && last_name)
-        // ============== Check if the username is already taken =============== //
-        // if(!dbApi.userNameExists()) {
-        //     try {
-        //         let hashedPassword = hashPassword(password);
-        //         dbApi.addUser(username, hashedPassword, first_name, last_name);
-        //     }
-        //     catch(e) {
-        //         console.log('An error occurred while trying to register your account.');
-        //         console.log(e);
-        //     }
-        //
-        //     res.sendStatus(200);
-        // };
-        res.send("If the email/username doesn't already exist then add the user.");
+    if (username && password && first_name && last_name) {
+		//============== Check if the username is already taken =============== //
+		if(!dbApi.userNameExists(username)) {
+		    let hashedPassword = hashPassword(password);
+	        var userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+			if(userAdded){
+				res.json({status: "success"});
+			} else {
+				res.json({status: "failure"});
+			}
+		};
+	}
     else res.send("Please fill out all available fields.");
 });
 
@@ -233,7 +235,8 @@ function generateTempPassword() {
 }
 
 function hashPassword(password) {
-    console.log(`Hash the password: ${password}`);
+    console.log(`Hash the password: ${password}`)
+	return password;
 }
 
 //====== Start listening on whatever port ======
