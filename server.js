@@ -17,16 +17,25 @@ if (uri == null || uri == "")
 //===== Setup the database connection and access functions
 dbApi = {};
 async function dbInit(){
-    const client = new Client({
-        connectionString: uri,
-        ssl: { 
-            rejectUnauthorized: false 
+    const client = (async ()=>{
+        var c;
+        try{
+            c = new Client({
+                    connectionString: uri,
+                    ssl: { 
+                        rejectUnauthorized: false 
+                    }
+                });
+            console.log("Connecting to database...");
+            await c.connect();
+            console.log("Connection complete! Initializing api...");
+            return c;
+        } catch (e) {
+            console.log("Error setting up database connection.");
+            console.log(e);
+            console.log("\n\nNo Database Connection.\nAll queries will instead be printed, and empty results returned.");
         }
-    });
-    console.log("Connecting to database...");
-    await client.connect();
-    console.log("Connection complete! Initializing api...");
-    
+    })();
     /*
      * Helper wrapper which returns just the rows for ease of use.
      * 
@@ -36,6 +45,12 @@ async function dbInit(){
      *             query. Should be an array.
      */
     async function exec(query, values){
+        if(!client.query){
+            console.log("\nWould be running query: \n"+query);
+            if(values)
+                console.log("With Values: \n"+JSON.stringify(values));
+            return [];
+        }
         return (await client.query(query, values)).rows;
     }
     
