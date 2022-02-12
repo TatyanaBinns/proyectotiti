@@ -45,13 +45,12 @@ async function dbInit(){
      *             query. Should be an array.
      */
     async function exec(query, values){
-        if(!client.query){
-            console.log("\nWould be running query: \n"+query);
-            if(values)
-                console.log("With Values: \n"+JSON.stringify(values));
-            return [];
-        }
-        return (await client.query(query, values)).rows;
+        if(client && client.query)
+            return (await client.query(query, values)).rows;
+        console.log("\nWould be running query: \n"+query);
+        if(values)
+            console.log("With Values: \n"+JSON.stringify(values));
+        return [];
     }
     
     //Debug function, gets the current time from the database server.
@@ -107,9 +106,15 @@ dbInit().catch(err => console.log(err));
 const app = express();
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+    extended: true 
+}))
 // parse application/json
 app.use(bodyParser.json())
+// Grab anything. Please, just anything.
+app.use(bodyParser.text({
+    type: "*/*"
+}));
 
 
 //============ Initialize endpoints ============
@@ -120,7 +125,6 @@ app.get('/', async (req, res) => {
 var storePing = async (req, res) => {
     //req.body.    (TODO: need format from ece team.) 
     var logEntry = {
-        raw: req.rawBody,
         body: req.body,
         query: req.query
     };
