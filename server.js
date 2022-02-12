@@ -141,6 +141,10 @@ app.get('/listpings', async (req, res) => {
     res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
 });
 
+app.get('/listlogs', async (req, res) => {
+    res.send("<pre><code>"+JSON.stringify(await dbApi.listlogs(), null, 4)+"</pre></code>")
+});
+
 
 //====== User Controller Methods ======
 const register = async (req, res) => {
