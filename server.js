@@ -117,7 +117,7 @@ app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
 });
 
-var storePing = (req, res) => (async() => {
+var storePing = async (req, res) => {
     //req.body.    (TODO: need format from ece team.) 
     var logEntry = {
         raw: req.rawBody,
@@ -129,17 +129,17 @@ var storePing = (req, res) => (async() => {
 	await dbApi.ensureStation(stationid);
 	await dbApi.ensureTracker(trackerid);
     res.send(JSON.stringify(await dbApi.storeping(trackerid, stationid, lat, lon, velocity), null, 4))
-})();
+};
 app.get('/storeping', storePing);
 app.post('/storeping', storePing);
 
-app.get('/listpings', (req, res) => (async() => {
+app.get('/listpings', async (req, res) => {
     res.send("<pre><code>"+JSON.stringify(await dbApi.listpings(), null, 4)+"</pre></code>")
-})());
+});
 
 
 //====== User Controller Methods ======
-const register = (req, res) => (async() => {
+const register = async (req, res) => {
     const { username, password, first_name, last_name } = req.body;
 
     // Verify all fields were properly filled
@@ -158,9 +158,9 @@ const register = (req, res) => (async() => {
         };
 	}
     else res.send("Please fill out all available fields.");
-})();
+};
 
-const login = (req, res) => (async() => {
+const login = async (req, res) => {
     const { username, password } = req.body;
     if (username && password )
         // if(dbApi.userNameExists()) {
@@ -179,9 +179,9 @@ const login = (req, res) => (async() => {
         // };
         res.send("If the username already exist then compare the username/passwords and login the user.");
     else res.send("Please fill out all available fields.");
-});
+};
 
-const logout = (req, res) => (async () => {
+const logout = async (req, res) => {
     console.log("Logging out...");
         // if(dbApi.userNameExists()) {
         //     let hashedPassword = hashPassword(password);
@@ -195,38 +195,38 @@ const logout = (req, res) => (async () => {
         //
         //     res.sendStatus(200);
         // };
-});
+};
 
-const forgotPassword = (req, res) => (async() => {
+const forgotPassword = async (req, res) => {
     let { email } = req.body, tempPassword = generateTempPassword;
     dbApi.updatePassword(tempPassword);
     console.log("Send an email to the user");
     res.sendStatus(200);
-});
+};
 
-const updatePassword = (req, res) => (async() => {
+const updatePassword = async (req, res) => {
     let { password } = req.body;
     let hashedPassword = hashPassword(password);
     dbApi.updatePassword(hashedPassword);
     res.sendStatus(200);
-});
+};
 
 
 //====== User Controller Methods ======
-const getUsers = (req, res) => (async() => {
+const getUsers = async (req, res) => {
     dbApi.getUsers();
     res.sendStatus(200);
-});
+};
 
-const updateUserPermissions = (req, res) => (async() => {
+const updateUserPermissions = async (req, res) => {
     res.send("Update the user permissions if the user is the admin.");
-});
+};
 
-const deleteUser = (req, res) => (async() => {
+const deleteUser = async (req, res) => {
     let {username} = req.body;
     dbApi.deleteUser(username);
     res.send(`Delete the user with username:${username}`);
-});
+};
 
 
 //====== User Routes ======
