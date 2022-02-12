@@ -67,6 +67,8 @@ async function dbInit(){
 
     dbApi.listpings = () => exec('SELECT * FROM pings;');
 
+    dbApi.listlogs = () => exec('SELECT * FROM logs;');
+
     dbApi.userNameExists = (username) => {
 		return true;
 	}
@@ -111,9 +113,9 @@ app.use(bodyParser.json())
 
 
 //============ Initialize endpoints ============
-app.get('/', (req, res) => (async() => {
+app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
-})());
+});
 
 var storePing = (req, res) => (async() => {
     //req.body.    (TODO: need format from ece team.) 
