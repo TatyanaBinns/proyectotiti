@@ -1,7 +1,6 @@
-import './Landing.css';
+import './styles.css';
 import {Button} from '@material-ui/core';
 import {Link} from 'react-router-dom';
-
 
 
 function Landing() {

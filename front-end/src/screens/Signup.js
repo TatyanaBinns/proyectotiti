@@ -1,4 +1,4 @@
-import './Signup.css';
+import './styles.css';
 import {Box, TextField, Button} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 
