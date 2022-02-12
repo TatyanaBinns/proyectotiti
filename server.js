@@ -17,15 +17,15 @@ if (uri == null || uri == "")
 //===== Setup the database connection and access functions
 dbApi = {};
 async function dbInit(){
-    const client = (async ()=>{
+    const client = await (async ()=>{
         var c;
         try{
             c = new Client({
-                    connectionString: uri,
-                    ssl: { 
-                        rejectUnauthorized: false 
-                    }
-                });
+                connectionString: uri,
+                ssl: { 
+                    rejectUnauthorized: false 
+                }
+            });
             console.log("Connecting to database...");
             await c.connect();
             console.log("Connection complete! Initializing api...");
