@@ -80,16 +80,20 @@ async function dbInit(){
 	};
 
 	// TODO: Log the user in and out by toggling a boolean field 
-    dbApi.loginUser = () => console.log(
-        'Please add a boolean field for the user to represent whether they are signed in.\n' +
-        'We will update this field whenever the user signs in or signs out.'
+    dbApi.loginUser = (username, hashedPassword) => console.log(
+        console.log(`Logging in user: ${username}, with password: ${hashedPassword}`)
+		return JSON.stringify("User logged in.");
     );
 
     dbApi.getUserLoggedInValue = () => console.log(
         'Please check the user table for the boolean field representing whether the user is logged in.'
     );
 
-    dbApi.getUserByPassword = (hashedPassword) => console.log(`Get the user with the ${hashedPassword}.`);
+    dbApi.getUserByPassword = (hashedPassword) => {
+		console.log(`Getting the user with the password: ${hashedPassword}.`)
+		var dbUser = {username: "Name"};
+		return JSON.stringify(dbUser);
+	};
 
     dbApi.getUsers = () => console.log("Get ALL users from the DB");
 
