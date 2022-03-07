@@ -9,8 +9,8 @@
 //======== User Routes ========
 // POST  '/register' ------------------------> register an account
 // GET	 '/register' ------------------------> verify an account is already registered
-// GET	 '/login' ---------------------------> login
-// POST	 '/logout' --------------------------> logout
+// POST	 '/login' ---------------------------> login
+// GET	 '/logout' --------------------------> logout
 // POST	 '/forgot-password' -----------------> send email with password reset link
 // PUT	 '/update-password' -----------------> update user password
 

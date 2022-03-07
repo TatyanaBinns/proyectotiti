@@ -68,15 +68,18 @@ async function dbInit(){
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
 
+	// TODO: Check DB for username
     dbApi.userNameExists = (username) => {
 		return true;
 	}
 
+	// TODO: Add user to DB
     dbApi.addUser = (username, hashedPassword, first_name, last_name) => {
 		console.log(`Adding user: ${username}, with password: ${hashedPassword}, and name:${first_name} ${last_name}`)
 		return true;
 	};
 
+	// TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = () => console.log(
         'Please add a boolean field for the user to represent whether they are signed in.\n' +
         'We will update this field whenever the user signs in or signs out.'
@@ -187,23 +190,16 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { username, password } = req.body;
-    if (username && password )
-        // if(dbApi.userNameExists()) {
-        //     let hashedPassword = hashPassword(password);
-        //     let dbUser = dbApi.getUserByPassword(hashedPassword);
-        //     if(dbUser === username) {
-        //         try {
-        //             dbApi.loginUser(username, hashedPassword);
-        //         }
-        //         catch(e) {
-        //             console.log('An error occurred while trying to login to your account.');
-        //             console.log(e);
-        //         }
-        //         res.sendStatus(200);
-        //     }
-        // };
-        res.send("If the username already exist then compare the username/passwords and login the user.");
-    else res.send("Please fill out all available fields.");
+    if (username && password) {
+		if(dbApi.userNameExists()) {
+			let hashedPassword = hashPassword(password);
+            let dbUser = dbApi.getUserByPassword(hashedPassword);
+			if(dbUser.username === username) {
+                dbApi.loginUser(username, hashedPassword);
+                res.sendStatus(200);
+            }
+        } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
+	} else res.send("Please fill out all available fields.");
 };
 
 const logout = async (req, res) => {
@@ -244,8 +240,8 @@ app.delete('/delete-user', deleteUser);
 //====== User Routes ======
 app.post('/register', register);
 app.get('/register', register);
-app.get('/login', login);
-app.post('/logout', logout);
+app.post('/login', login);
+app.get('/logout', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password', updatePassword);
 
