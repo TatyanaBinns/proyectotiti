@@ -146,6 +146,22 @@ app.get('/listlogs', async (req, res) => {
 });
 
 
+//====== Admin Controller Methods ======
+const getUsers = async (req, res) => {
+    dbApi.getUsers();
+    res.sendStatus(200);
+};
+
+const updateUserPermissions = async (req, res) => {
+    res.send("Update the user permissions if the user is the admin.");
+};
+
+const deleteUser = async (req, res) => {
+    let {username} = req.body;
+    dbApi.deleteUser(username);
+    res.send(`Delete the user with username:${username}`);
+};
+
 //====== User Controller Methods ======
 const register = async (req, res) => {
     const { username, password, first_name, last_name } = req.body;
@@ -167,6 +183,7 @@ const register = async (req, res) => {
 	}
     else res.send("Please fill out all available fields.");
 };
+
 
 const login = async (req, res) => {
     const { username, password } = req.body;
@@ -218,24 +235,6 @@ const updatePassword = async (req, res) => {
     dbApi.updatePassword(hashedPassword);
     res.sendStatus(200);
 };
-
-
-//====== User Controller Methods ======
-const getUsers = async (req, res) => {
-    dbApi.getUsers();
-    res.sendStatus(200);
-};
-
-const updateUserPermissions = async (req, res) => {
-    res.send("Update the user permissions if the user is the admin.");
-};
-
-const deleteUser = async (req, res) => {
-    let {username} = req.body;
-    dbApi.deleteUser(username);
-    res.send(`Delete the user with username:${username}`);
-};
-
 
 //====== User Routes ======
 app.post('/register', register);
