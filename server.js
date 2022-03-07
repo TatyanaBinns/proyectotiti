@@ -146,7 +146,7 @@ app.get('/listlogs', async (req, res) => {
 });
 
 
-//====== Admin Controller Methods ======
+//====== Admin Controller Functions ======
 const getUsers = async (req, res) => {
     dbApi.getUsers();
     res.sendStatus(200);
@@ -162,7 +162,7 @@ const deleteUser = async (req, res) => {
     res.send(`Delete the user with username:${username}`);
 };
 
-//====== User Controller Methods ======
+//====== User Controller Functions ======
 const register = async (req, res) => {
     const { username, password, first_name, last_name } = req.body;
 
@@ -249,9 +249,7 @@ app.post('/logout', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password', updatePassword);
 
-
 //======= Monkey Data Routes ======
-
 
 
 //====== Helper Functions ======

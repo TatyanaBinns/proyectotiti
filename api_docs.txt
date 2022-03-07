@@ -1,0 +1,19 @@
+//======== API Routes =========
+
+
+//======= Admin Routes ========
+// GET 	 '/get-users' -----------------------> get a list of users
+// PUT 	 '/update-user-permissions' ---------> update the user permissions 
+// DELETE '/delete-user' --------------------> delete a user
+
+//======== User Routes ========
+// POST  '/register' ------------------------> register an account
+// GET	 '/register' ------------------------> verify an account is already registered
+// GET	 '/login' ---------------------------> login
+// POST	 '/logout' --------------------------> logout
+// POST	 '/forgot-password' -----------------> send email with password reset link
+// PUT	 '/update-password' -----------------> update user password
+
+//==== Monkey Data Routes =====
+// POST '/location' -------------------------> store location data
+// GET	'/location' -------------------------> get location data
