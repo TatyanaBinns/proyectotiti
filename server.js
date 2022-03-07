@@ -239,7 +239,7 @@ const updatePassword = async (req, res) => {
 //======= Admin Routes =======
 app.get('/get-users', getUsers);
 app.put('/update-user-permissions', updateUserPermissions);
-app.delete('delete-user', deleteUser);
+app.delete('/delete-user', deleteUser);
 
 //====== User Routes ======
 app.post('/register', register);
