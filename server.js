@@ -236,6 +236,11 @@ const updatePassword = async (req, res) => {
     res.sendStatus(200);
 };
 
+//======= Admin Routes =======
+app.get('/get-users', getUsers);
+app.put('/update-user-permissions', updateUserPermissions);
+app.delete('delete-user', deleteUser);
+
 //====== User Routes ======
 app.post('/register', register);
 app.get('/register', register);
@@ -243,12 +248,6 @@ app.get('/login', login);
 app.post('/logout', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password', updatePassword);
-
-
-//======= Admin Routes =======
-app.get('/get-users', getUsers);
-app.put('/update-user-privelages', updateUserPermissions);
-app.delete('delete-user', deleteUser);
 
 
 //======= Monkey Data Routes ======
