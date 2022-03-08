@@ -22,9 +22,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: { 
-                    rejectUnauthorized: false 
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -70,26 +70,48 @@ async function dbInit(){
 
 	// TODO: Check DB for username
     dbApi.userNameExists = (username) => {
-		return true;
+        return true;
 	}
 
 	// TODO: Add user to DB
     dbApi.addUser = (username, hashedPassword, first_name, last_name) => {
-		console.log(`Adding user: ${username}, with password: ${hashedPassword}, and name:${first_name} ${last_name}`)
+		console.log(`Adding user: ${username}, with password: ${hashedPassword}, and name:${first_name} ${last_name}`);
 		return true;
 	};
 
 	// TODO: Log the user in and out by toggling a boolean field 
-    dbApi.loginUser = () => console.log(
-        'Please add a boolean field for the user to represent whether they are signed in.\n' +
-        'We will update this field whenever the user signs in or signs out.'
-    );
+    dbApi.loginUser = (username, hashedPassword) => {
+        return true;
+    };
 
-    dbApi.getUserLoggedInValue = () => console.log(
-        'Please check the user table for the boolean field representing whether the user is logged in.'
-    );
+    // TODO: Log the user in and out by toggling a boolean field
+    dbApi.logoutUser = (username, hashedPassword) => {
+        //Example dbUser Object
+        var dbUser = {
+            username: "username",
+            password_hash: "password",
+            first_name: "First",
+            last_name: "Last",
+            logged_in: false
+        };
+        return dbUser;
+    };
 
-    dbApi.getUserByPassword = (hashedPassword) => console.log(`Get the user with the ${hashedPassword}.`);
+    // TODO: Check if the user is logged in and
+    dbApi.getUserLoggedInValue = () => { return true };
+
+    // TODO: Get the user from the DB using the hashedPassword
+    dbApi.getUserByPassword = (hashedPassword) => {
+        //Example dbUser Object
+        var dbUser = {
+            username: "username",
+            password_hash: "password",
+            first_name: "First",
+            last_name: "Last",
+            logged_in: true
+        };
+        return dbUser;
+    };
 
     dbApi.getUsers = () => console.log("Get ALL users from the DB");
 
@@ -190,14 +212,15 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { username, password } = req.body;
+
     if (username && password) {
-		if(dbApi.userNameExists()) {
+        if(dbApi.userNameExists()) {
 			let hashedPassword = hashPassword(password);
             let dbUser = dbApi.getUserByPassword(hashedPassword);
 			if(dbUser.username === username) {
                 dbApi.loginUser(username, hashedPassword);
                 res.sendStatus(200);
-            }
+            } else res.send("The username and password combination provided was invalid.");
         } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
 	} else res.send("Please fill out all available fields.");
 };
