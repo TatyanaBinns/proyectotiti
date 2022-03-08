@@ -85,25 +85,18 @@ async function dbInit(){
     };
 
     // TODO: Log the user in and out by toggling a boolean field
-    dbApi.logoutUser = (username, hashedPassword) => {
-        //Example dbUser Object
-        var dbUser = {
-            username: "username",
-            password_hash: "password",
-            first_name: "First",
-            last_name: "Last",
-            logged_in: false
-        };
-        return dbUser;
+    dbApi.logoutUser = (uid) => {
+        return true;
     };
 
     // TODO: Check if the user is logged in and
-    dbApi.getUserLoggedInValue = () => { return true };
+    dbApi.getUserLoggedInValue = (username) => { return true };
 
     // TODO: Get the user from the DB using the hashedPassword
     dbApi.getUserByPassword = (hashedPassword) => {
         //Example dbUser Object
         var dbUser = {
+            uid: 1234,
             username: "username",
             password_hash: "password",
             first_name: "First",
@@ -206,7 +199,7 @@ const register = async (req, res) => {
             res.json({status: "username exist"});
         };
 	}
-    else res.send("Please fill out all available fields.");
+    else res.status(400).send("Please fill out all available fields.");
 };
 
 
@@ -214,7 +207,7 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     if (username && password) {
-        if(dbApi.userNameExists()) {
+        if(dbApi.userNameExists(username)) {
 			let hashedPassword = hashPassword(password);
             let dbUser = dbApi.getUserByPassword(hashedPassword);
 			if(dbUser.username === username) {
@@ -227,18 +220,10 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     console.log("Logging out...");
-        // if(dbApi.userNameExists()) {
-        //     let hashedPassword = hashPassword(password);
-        //     try {
-        //         passwordVerification(username, password);
-        //     }
-        //     catch(e) {
-        //         console.log('An error occurred while trying to login to your account.');
-        //         console.log(e);
-        //     }
-        //
-        //     res.sendStatus(200);
-        // };
+    let loggedOut = dbApi.logoutUser(req.params.uid);
+    if(loggedOut == true){
+        res.status(200).send("Successfully logged out.");
+    } else { res.status(400).send("An error occurred attempting to log out.")}
 };
 
 const forgotPassword = async (req, res) => {
@@ -264,7 +249,7 @@ app.delete('/delete-user', deleteUser);
 app.post('/register', register);
 app.get('/register', register);
 app.post('/login', login);
-app.get('/logout', logout);
+app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password', updatePassword);
 
