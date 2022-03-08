@@ -86,6 +86,7 @@ async function dbInit(){
 
     // TODO: Log the user in and out by toggling a boolean field
     dbApi.logoutUser = (uid) => {
+        // TODO: Fetch the user by uid and toggle the user's logged_in property to false
         return true;
     };
 
@@ -234,9 +235,9 @@ const forgotPassword = async (req, res) => {
 };
 
 const updatePassword = async (req, res) => {
-    let { password } = req.body;
-    let hashedPassword = hashPassword(password);
-    dbApi.updatePassword(hashedPassword);
+    let { new_password } = req.body;
+    let hashedNewPassword = hashPassword(new_password);
+    dbApi.updatePassword(hashedNewPassword);
     res.sendStatus(200);
 };
 
