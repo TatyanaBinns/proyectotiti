@@ -23,9 +23,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -160,7 +160,10 @@ async function dbInit(){
         console.log(`Updating permissions of the user with uid: ${uid}`);
     };
 
-    dbApi.deleteUser = (username) => console.log(`Delete the user with username:${username}`);
+    // TODO: Remove the user with the given uid from the DB
+    dbApi.deleteUser = (uid) => {
+        console.log(`Deleting the user with uid:${uid}`);
+    }
 
     console.log("Database API Loaded");
 }
@@ -226,7 +229,7 @@ const getUsers = async (req, res) => {
 
 const updateUserPermissions = async (req, res) => {
     let { user_uid, new_permission } = req.body;
-    if(!user_uid || !new_permission){
+    if(!user_uid || !new_permission) {
         res.status(400).send(JSON.stringify("Please fill out all available fields."));
     } else {
         let admin_uid = req.params.uid;
@@ -241,9 +244,18 @@ const updateUserPermissions = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-    let {username} = req.body;
-    dbApi.deleteUser(username);
-    res.send(`Delete the user with username:${username}`);
+    let {user_uid} = req.body;
+    if(!user_uid) {
+        res.status(400).send(JSON.stringify("Please fill out all available fields."));
+    } else {
+        let admin_uid = req.params.uid;
+        if(dbApi.isAdmin(admin_uid)){
+            dbApi.deleteUser(user_uid);
+            res.status(200).send(JSON.stringify(`Successfully deleted the user with uid: ${user_uid}.`));
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
 };
 
 //====== User Controller Functions ======
@@ -348,7 +360,7 @@ const updatePassword = async (req, res) => {
 //======= Admin Routes =======
 app.get('/get-users/:uid', getUsers);
 app.put('/update-user-permissions/:uid', updateUserPermissions);
-app.delete('/delete-user', deleteUser);
+app.delete('/delete-user/:uid', deleteUser);
 
 //====== User Routes ======
 app.post('/register', register);
