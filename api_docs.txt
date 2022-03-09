@@ -2,7 +2,7 @@
 
 
 //======= Admin Routes ========
-// GET 	 '/get-users' -----------------------> get a list of users
+// GET 	 '/get-users/:uid' ------------------> get a list of users
 // PUT 	 '/update-user-permissions' ---------> update the user permissions 
 // DELETE '/delete-user' --------------------> delete a user
 

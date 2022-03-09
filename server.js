@@ -16,16 +16,16 @@ if (uri == null || uri == "")
 
 
 //===== Setup the database connection and access functions
-dbApi = {};
+dbApi = { };
 async function dbInit(){
     const client = await (async ()=>{
         var c;
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -98,13 +98,14 @@ async function dbInit(){
     dbApi.getUserByPassword = (hashedPassword) => {
         //Example dbUser Object
         var dbUser = {
-            uid: 1234,
+            uid: 12345,
             username: "username",
             email: "example@example.com",
             password_hash: "password",
             first_name: "First",
             last_name: "Last",
             logged_in: true,
+            permission: "admin",
             token: ''
         };
         return dbUser;
@@ -113,13 +114,46 @@ async function dbInit(){
     // TODO: Get all users
     dbApi.getUsers = () => {
         console.log("Getting all users from the DB...");
+        //Create a few db users to return in a list
+        let users = {
+            dbUser1: {
+                uid: 12345,
+                username: "username",
+                email: "example@example.com",
+                password_hash: "password",
+                first_name: "First",
+                last_name: "Last",
+                logged_in: true,
+                permission: "admin",
+                token: ''
+            }, dbUser2: {
+                uid: 12345,
+                username: "username",
+                email: "example@example.com",
+                password_hash: "password",
+                first_name: "AnotherFirst",
+                last_name: "AnotherLast",
+                logged_in: false,
+                permission: "user",
+                token: ''
+            }
+        };
+        return users;
     };
 
     // TODO: Update the password
     dbApi.updatePassword = (email, newPassword) => {
         console.log(`Update the password of the user with the email: ${email} the new password: ${newPassword}`);
         return true;
-    }
+    };
+
+    // TODO: Lookup user by UID and return value of permission property
+    dbApi.isAdmin = (uid) => {
+        // This is a temporary placeholder where the Admin has uid 12345
+        if(uid == 12345){
+            return true
+        } else return false;
+    };
 
     dbApi.updateUserPermissions = () => console.log("Update the user permissions specified");
 
@@ -177,8 +211,14 @@ app.get('/listlogs', async (req, res) => {
 
 //====== Admin Controller Functions ======
 const getUsers = async (req, res) => {
-    dbApi.getUsers();
-    res.sendStatus(200);
+    let uid = req.params.uid;
+    if(dbApi.isAdmin(uid)){
+        let users = dbApi.getUsers();
+        res.status(200).send(JSON.stringify(users));
+    } else {
+        res.status(403).send('You do not have permission to view this page.');
+    }
+
 };
 
 const updateUserPermissions = async (req, res) => {
@@ -291,7 +331,7 @@ const updatePassword = async (req, res) => {
 };
 
 //======= Admin Routes =======
-app.get('/get-users', getUsers);
+app.get('/get-users/:uid', getUsers);
 app.put('/update-user-permissions', updateUserPermissions);
 app.delete('/delete-user', deleteUser);
 
