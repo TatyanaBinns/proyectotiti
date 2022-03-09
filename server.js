@@ -228,9 +228,11 @@ const logout = async (req, res) => {
     } else { res.status(400).send("An error occurred attempting to log out.")}
 };
 
-// TODO: Fix this and make it send and email
+// TODO: We need to replace the fake Ethereal SMTP service with a real SMTP service
+// TODO: Investigate Heroku SMTP offerings: https://devcenter.heroku.com/articles/smtp
 const forgotPassword = async (req, res) => {
-    let { email } = req.body.email, tempPassword = generateTempPassword();
+    let { email } = req.body;
+    let tempPassword = generateTempPassword();
     dbApi.updatePassword(tempPassword);
 
     // Generate test SMTP service account from ethereal.email
@@ -251,7 +253,7 @@ const forgotPassword = async (req, res) => {
     // send mail with defined transport object
     let info = await transporter.sendMail({
         // sender address
-        from: '"👻" <robertpomichter@yahoo.com>',
+        from: 'robertpomichter@yahoo.com',
         // list of receivers
         to: `${email}`,
         // Subject line
@@ -267,7 +269,8 @@ const forgotPassword = async (req, res) => {
     });
 
     console.log(`An email was sent to the user with email: ${email}.`);
-    res.sendStatus(200);
+    console.log(info);
+    res.status(200).send('Please check your inbox for an email containing a link to reset your password.');
 };
 
 const updatePassword = async (req, res) => {
