@@ -100,17 +100,26 @@ async function dbInit(){
         var dbUser = {
             uid: 1234,
             username: "username",
+            email: "example@example.com",
             password_hash: "password",
             first_name: "First",
             last_name: "Last",
-            logged_in: true
+            logged_in: true,
+            token: ''
         };
         return dbUser;
     };
 
-    dbApi.getUsers = () => console.log("Get ALL users from the DB");
+    // TODO: Get all users
+    dbApi.getUsers = () => {
+        console.log("Getting all users from the DB...");
+    };
 
-    dbApi.updatePassword = (hashedPassword) => console.log(`Update the user's password with the new password: ${hashedPassword}`);
+    // TODO: Update the password
+    dbApi.updatePassword = (email, newPassword) => {
+        console.log(`Update the password of the user with the email: ${email} the new password: ${newPassword}`);
+        return true;
+    }
 
     dbApi.updateUserPermissions = () => console.log("Update the user permissions specified");
 
@@ -232,8 +241,8 @@ const logout = async (req, res) => {
 // TODO: Investigate Heroku SMTP offerings: https://devcenter.heroku.com/articles/smtp
 const forgotPassword = async (req, res) => {
     let { email } = req.body;
-    let tempPassword = generateTempPassword();
-    dbApi.updatePassword(tempPassword);
+    let token = generateTempPassword();
+    dbApi.updatePassword(email, token);
 
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
@@ -261,11 +270,11 @@ const forgotPassword = async (req, res) => {
         // plain text body
         text: `Please use the following link to reset your password: ${
             uri
-        }/update-password/path-parameter`,
+        }/update-password/${token}`,
         // html body
         html: `<p>Please use the following link to reset your password:</p> <p>${
             uri
-        }/update-password/${tempPassword}</p>`
+        }/update-password/${token}</p>`
     });
 
     console.log(`An email was sent to the user with email: ${email}.`);
@@ -274,10 +283,11 @@ const forgotPassword = async (req, res) => {
 };
 
 const updatePassword = async (req, res) => {
-    let { new_password } = req.body;
+    let { new_password } = req.body, tempPassword = req.params.tempPassword;
     let hashedNewPassword = hashPassword(new_password);
-    dbApi.updatePassword(hashedNewPassword);
-    res.sendStatus(200);
+    let user = dbApi.getUserByPassword(tempPassword);
+    dbApi.updatePassword(user.email, hashedNewPassword);
+    res.status(200).send("Successfully updated your password.");
 };
 
 //======= Admin Routes =======
@@ -291,7 +301,7 @@ app.get('/register', register);
 app.post('/login', login);
 app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
-app.put('/update-password', updatePassword);
+app.put('/update-password/:tempPassword', updatePassword);
 
 //======= Monkey Data Routes ======
 
