@@ -2,9 +2,9 @@
 
 
 //======= Admin Routes ========
-// GET 	 '/get-users/:uid' ------------------> get a list of users
-// PUT 	 '/update-user-permissions' ---------> update the user permissions 
-// DELETE '/delete-user' --------------------> delete a user
+// GET 	 '/get-users/:uid' -----------------------> get a list of users
+// PUT 	 '/update-user-permissions/:uid' ---------> update the user permissions
+// DELETE '/delete-user/:uid' --------------------> delete a user
 
 //======== User Routes ========
 // POST  '/register' ------------------------> register an account
