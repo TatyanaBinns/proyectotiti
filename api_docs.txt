@@ -10,10 +10,9 @@
 // POST  '/register' ------------------------> register an account
 // GET	 '/register' ------------------------> verify an account is already registered
 // POST	 '/login' ---------------------------> login
-// GET	 '/logout' --------------------------> logout
+// GET	 '/logout/:uid' ---------------------> logout user with the uid in the path parameter
 // POST	 '/forgot-password' -----------------> send email with password reset link
-// PUT	 '/update-password' -----------------> update user password
+// PUT	 '/update-password/:tempPassword' ---> update the password of the user with tempPassword
 
 //==== Monkey Data Routes =====
-// POST '/location' -------------------------> store location data
 // GET	'/location' -------------------------> get location data
