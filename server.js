@@ -23,9 +23,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -155,7 +155,10 @@ async function dbInit(){
         } else return false;
     };
 
-    dbApi.updateUserPermissions = () => console.log("Update the user permissions specified");
+    // TODO: Change value of permission property for user with the given uid
+    dbApi.updateUserPermissions = (uid, permission) => {
+        console.log(`Updating permissions of the user with uid: ${uid}`);
+    };
 
     dbApi.deleteUser = (username) => console.log(`Delete the user with username:${username}`);
 
@@ -222,7 +225,19 @@ const getUsers = async (req, res) => {
 };
 
 const updateUserPermissions = async (req, res) => {
-    res.send("Update the user permissions if the user is the admin.");
+    let { user_uid, new_permission } = req.body;
+    if(!user_uid || !new_permission){
+        res.status(400).send(JSON.stringify("Please fill out all available fields."));
+    } else {
+        let admin_uid = req.params.uid;
+        if(dbApi.isAdmin(admin_uid)){
+            dbApi.updateUserPermissions(user_uid, new_permission);
+            res.status(200).send(JSON.stringify(`Successfully updated the permissions of the user with uid: ${user_uid}.`));
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
+
 };
 
 const deleteUser = async (req, res) => {
@@ -332,7 +347,7 @@ const updatePassword = async (req, res) => {
 
 //======= Admin Routes =======
 app.get('/get-users/:uid', getUsers);
-app.put('/update-user-permissions', updateUserPermissions);
+app.put('/update-user-permissions/:uid', updateUserPermissions);
 app.delete('/delete-user', deleteUser);
 
 //====== User Routes ======
