@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser =require('body-parser')
 const { Client } = require('pg');
+const nodemailer = require('nodemailer');
 
 
 //===== Pull in environment variables from Heroku
@@ -22,9 +23,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -227,10 +228,45 @@ const logout = async (req, res) => {
     } else { res.status(400).send("An error occurred attempting to log out.")}
 };
 
+// TODO: Fix this and make it send and email
 const forgotPassword = async (req, res) => {
-    let { email } = req.body, tempPassword = generateTempPassword;
+    let { email } = req.body.email, tempPassword = generateTempPassword();
     dbApi.updatePassword(tempPassword);
-    console.log("Send an email to the user");
+
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    let testAccount = await nodemailer.createTestAccount();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: testAccount.user, // generated ethereal user
+            pass: testAccount.pass, // generated ethereal password
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        // sender address
+        from: '"👻" <robertpomichter@yahoo.com>',
+        // list of receivers
+        to: `${email}`,
+        // Subject line
+        subject: "Proyecto Titi Password Reset Link",
+        // plain text body
+        text: `Please use the following link to reset your password: ${
+            uri
+        }/update-password/path-parameter`,
+        // html body
+        html: `<p>Please use the following link to reset your password:</p> <p>${
+            uri
+        }/update-password/${tempPassword}</p>`
+    });
+
+    console.log(`An email was sent to the user with email: ${email}.`);
     res.sendStatus(200);
 };
 
