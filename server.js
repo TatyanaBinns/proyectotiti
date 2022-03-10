@@ -23,9 +23,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                // ssl: {
-                //     rejectUnauthorized: false
-                // }
+                ssl: {
+                    rejectUnauthorized: false
+                }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -163,7 +163,36 @@ async function dbInit(){
     // TODO: Remove the user with the given uid from the DB
     dbApi.deleteUser = (uid) => {
         console.log(`Deleting the user with uid:${uid}`);
-    }
+    };
+
+    // TODO: Store the uuid and animalId in the Tracker table and return the generated trackerId
+    dbApi.registerTracker = (uuid, animalId) => {
+        console.log(`Registering the tracker with uuid: ${uuid} for the animal with animalId: ${animalId}`);
+        // Return the trackerId
+        return uuid;
+    };
+
+    dbApi.getPings = (trackerId, startTime, endTime) => {
+        console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
+        // A sample object containing multiple pings
+        let pings = {
+            ping1: {
+                timestamp: Date.UTC(2022, 3, 10, 12, 35, 30, 999),
+                trackerid: 98765,
+                stationid: 8675309,
+                location: "somewhere",
+                velocity: "fast"
+            },
+            ping2: {
+                timestamp: Date.now(),
+                trackerid: 98765,
+                stationid: 8675309,
+                location: "anywhere",
+                velocity: "slow"
+            }
+        }
+        return pings;
+    };
 
     console.log("Database API Loaded");
 }
@@ -357,6 +386,58 @@ const updatePassword = async (req, res) => {
     res.status(200).send("Successfully updated your password.");
 };
 
+//====== Tracker Controller Functions ======
+const registerTracker = async (req, res) => {
+    let { uuid, animalId} = req.body;
+    if(!uuid || !animalId) {
+        res.status(400).send("Please fill out all available fields.");
+    }
+    let trackerId = dbApi.registerTracker(uuid, animalId);
+    if(trackerId) {
+        return res.status(200).send(`Successfully registered tracker: ${trackerId}`);
+    } else {
+        return res.status(418).send("An error occurred attempting to register your tracker.");
+    }
+};
+
+const getTrackers = async (req, res) => {
+
+};
+
+const updateTracker = async (req, res) => {
+
+};
+
+const deleteTracker = async (req, res) => {
+
+};
+
+//====== Base Station Controller Functions ======
+const registerBaseStation = async (req, res) => {
+
+};
+
+const getBaseStations = async (req, res) => {
+
+};
+
+const updateBaseStation = async (req, res) => {
+
+};
+
+const deleteBaseStation= async (req, res) => {
+
+};
+
+//====== Ping Controller Functions ======
+const getPings = async (req, res) => {
+    let trackerId = req.params.trackerId;
+    let startTime = req.params.startTime;
+    let endTime = req.params.endTime;
+    let pings = dbApi.getPings(trackerId, startTime, endTime);
+    res.status(200).send(JSON.stringify(pings));
+};
+
 //======= Admin Routes =======
 app.get('/get-users/:uid', getUsers);
 app.put('/update-user-permissions/:uid', updateUserPermissions);
@@ -370,7 +451,20 @@ app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password/:tempPassword', updatePassword);
 
-//======= Monkey Data Routes ======
+//======= Tracker Routes ======
+app.post('/trackers', registerTracker);
+app.get('/trackers', getTrackers);
+app.put('/trackers', updateTracker);
+app.delete('/trackers', deleteTracker);
+
+//======= Base Station Routes ======
+app.post('/base-station', registerBaseStation);
+app.get('/base-station', getBaseStations);
+app.put('/base-station', updateBaseStation);
+app.delete('/base-station', deleteBaseStation);
+
+//======= Ping Routes ======
+app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
 
 
 //====== Helper Functions ======
