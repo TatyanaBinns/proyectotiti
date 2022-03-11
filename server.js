@@ -138,19 +138,11 @@ async function dbInit(){
     };
 	*/
 
-    // TODO: Update the password
-    dbApi.updatePassword = (email, newPassword) => {
-        console.log(`Update the password of the user with the email: ${email} the new password: ${newPassword}`);
-        return true;
-    };
-
+    dbApi.updatePassword = (email, newPassword) => exec("UPDATE users SET password_hash=$1 WHERE email=$2;",[newPassword, email]);
+	
     // TODO: Lookup user by UID and return value of permission property
-    dbApi.isAdmin = (uid) => {
-        // This is a temporary placeholder where the Admin has uid 12345
-        if(uid == 12345){
-            return true
-        } else return false;
-    };
+    dbApi.isAdmin = (uid) => 
+		exec("select p.type,u.uid from users as u inner join permissions as p on u.uid = p.uid where u.uid = $1 and p.type='admin';", [uid]);
 
     // TODO: Change value of permission property for user with the given uid
     dbApi.updateUserPermissions = (uid, permission) => {
