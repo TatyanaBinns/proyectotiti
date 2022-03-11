@@ -69,16 +69,10 @@ async function dbInit(){
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
 
-	// TODO: Check DB for username
-    dbApi.userNameExists = (username) => {
-        return true;
-	}
+	dbApi.userNameExists = username => exec("SELECT uid FROM users where username=$1;",[username]).length > 0;
 
-	// TODO: Add user to DB
-    dbApi.addUser = (username, hashedPassword, first_name, last_name) => {
-		console.log(`Adding user: ${username}, with password: ${hashedPassword}, and name:${first_name} ${last_name}`);
-		return true;
-	};
+	dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
+		exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
 
 	// TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
@@ -111,8 +105,10 @@ async function dbInit(){
         return dbUser;
     };
 
-    // TODO: Get all users
-    dbApi.getUsers = () => {
+    dbApi.getUsers = () => exec('SELECT uid, username, first_name, last_name FROM users;');
+	
+	/*
+	{
         console.log("Getting all users from the DB...");
         //Create a few db users to return in a list
         let users = {
@@ -140,6 +136,7 @@ async function dbInit(){
         };
         return users;
     };
+	*/
 
     // TODO: Update the password
     dbApi.updatePassword = (email, newPassword) => {
