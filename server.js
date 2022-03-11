@@ -12,7 +12,6 @@ if (port == null || port == "")
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
-            //alternative
 
 
 //===== Setup the database connection and access functions
@@ -106,37 +105,6 @@ async function dbInit(){
     };
 
     dbApi.getUsers = () => exec('SELECT uid, username, first_name, last_name FROM users;');
-    
-    /*
-    {
-        console.log("Getting all users from the DB...");
-        //Create a few db users to return in a list
-        let users = {
-            dbUser1: {
-                uid: 12345,
-                username: "username",
-                email: "example@example.com",
-                password_hash: "password",
-                first_name: "First",
-                last_name: "Last",
-                logged_in: true,
-                permission: "admin",
-                token: ''
-            }, dbUser2: {
-                uid: 12345,
-                username: "username",
-                email: "example@example.com",
-                password_hash: "password",
-                first_name: "AnotherFirst",
-                last_name: "AnotherLast",
-                logged_in: false,
-                permission: "user",
-                token: ''
-            }
-        };
-        return users;
-    };
-    */
 
     dbApi.updatePassword = (email, newPassword) => exec("UPDATE users SET password_hash=$1 WHERE email=$2;",[newPassword, email]);
     
@@ -150,14 +118,11 @@ async function dbInit(){
     //Revoke permission property for user with the given uid
     dbApi.revokeUserPermission = (uid, permission) => exec('DELETE FROM public.permissions WHERE permission=$1 AND uid=$2;', [permission, uid] );
     
-    
-    
     //Remove the user with the given uid from the DB
     dbApi.deleteUser = (uid) => exec("DELETE FROM public.users WHERE uid= $1",[uid]);
 
     //Store the uuid and animalId in the Tracker table and return the generated trackerId
     dbApi.registerTracker = (uuid, animalId) => exec('INSERT INTO public.trackers (animalid, trackeruuid) VALUES($1, $2) RETURNING trackerid;',[uuid, animalId]);
-
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
@@ -186,10 +151,7 @@ async function dbInit(){
 dbInit().catch(err => console.log(err));
 
 
-
-
 const app = express();
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: true 
