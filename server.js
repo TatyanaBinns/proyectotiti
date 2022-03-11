@@ -140,15 +140,18 @@ async function dbInit(){
 
     dbApi.updatePassword = (email, newPassword) => exec("UPDATE users SET password_hash=$1 WHERE email=$2;",[newPassword, email]);
 	
-    // TODO: Lookup user by UID and return value of permission property
+    //Lookup user by UID and return value of permission property
     dbApi.isAdmin = (uid) => 
-		exec("select p.type,u.uid from users as u inner join permissions as p on u.uid = p.uid where u.uid = $1 and p.type='admin';", [uid]);
+		exec("SELECT p.type,u.uid FROM users AS u INNER JOIN permissions AS p ON u.uid = p.uid WHERE u.uid = $1 AND p.type='admin';", [uid]);
 
-    // TODO: Change value of permission property for user with the given uid
-    dbApi.updateUserPermissions = (uid, permission) => {
-        console.log(`Updating permissions of the user with uid: ${uid}`);
-    };
-
+    //Grant permission property for user with the given uid
+	dbApi.grantUserPermission = (uid, permission) => exec('INSERT INTO public.permissions("type", uid)VALUES($1,$2 );', [permission, uid] );
+	
+	//Revoke permission property for user with the given uid
+	dbApi.revokeUserPermission = (uid, permission) => exec('DELETE FROM public.permissions WHERE permission=$1 AND uid=$2;', [permission, uid] );
+	
+	
+	
     // TODO: Remove the user with the given uid from the DB
     dbApi.deleteUser = (uid) => {
         console.log(`Deleting the user with uid:${uid}`);
