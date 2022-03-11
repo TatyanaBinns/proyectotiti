@@ -69,12 +69,12 @@ async function dbInit(){
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
 
-	dbApi.userNameExists = username => exec("SELECT uid FROM users where username=$1;",[username]).length > 0;
+    dbApi.userNameExists = username => exec("SELECT uid FROM users where username=$1;",[username]).length > 0;
 
-	dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
-		exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
+    dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
+        exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
 
-	// TODO: Log the user in and out by toggling a boolean field 
+    // TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
         return true;
     };
@@ -106,9 +106,9 @@ async function dbInit(){
     };
 
     dbApi.getUsers = () => exec('SELECT uid, username, first_name, last_name FROM users;');
-	
-	/*
-	{
+    
+    /*
+    {
         console.log("Getting all users from the DB...");
         //Create a few db users to return in a list
         let users = {
@@ -136,22 +136,22 @@ async function dbInit(){
         };
         return users;
     };
-	*/
+    */
 
     dbApi.updatePassword = (email, newPassword) => exec("UPDATE users SET password_hash=$1 WHERE email=$2;",[newPassword, email]);
-	
+    
     //Lookup user by UID and return value of permission property
     dbApi.isAdmin = (uid) => 
-		exec("SELECT p.type,u.uid FROM users AS u INNER JOIN permissions AS p ON u.uid = p.uid WHERE u.uid = $1 AND p.type='admin';", [uid]);
+        exec("SELECT p.type,u.uid FROM users AS u INNER JOIN permissions AS p ON u.uid = p.uid WHERE u.uid = $1 AND p.type='admin';", [uid]);
 
     //Grant permission property for user with the given uid
-	dbApi.grantUserPermission = (uid, permission) => exec('INSERT INTO public.permissions("type", uid)VALUES($1,$2 );', [permission, uid] );
-	
-	//Revoke permission property for user with the given uid
-	dbApi.revokeUserPermission = (uid, permission) => exec('DELETE FROM public.permissions WHERE permission=$1 AND uid=$2;', [permission, uid] );
-	
-	
-	
+    dbApi.grantUserPermission = (uid, permission) => exec('INSERT INTO public.permissions("type", uid)VALUES($1,$2 );', [permission, uid] );
+    
+    //Revoke permission property for user with the given uid
+    dbApi.revokeUserPermission = (uid, permission) => exec('DELETE FROM public.permissions WHERE permission=$1 AND uid=$2;', [permission, uid] );
+    
+    
+    
     // TODO: Remove the user with the given uid from the DB
     dbApi.deleteUser = (uid) => {
         console.log(`Deleting the user with uid:${uid}`);
@@ -219,9 +219,9 @@ var storePing = async (req, res) => {
         query: req.query
     };
     await dbApi.log(JSON.stringify(logEntry, null, 4));
-	var trackerid= 4242, stationid = 42, lat= 28.365349, lon=81.125664, velocity=0.39;
-	await dbApi.ensureStation(stationid);
-	await dbApi.ensureTracker(trackerid);
+    var trackerid= 4242, stationid = 42, lat= 28.365349, lon=81.125664, velocity=0.39;
+    await dbApi.ensureStation(stationid);
+    await dbApi.ensureTracker(trackerid);
     res.send(JSON.stringify(await dbApi.storeping(trackerid, stationid, lat, lon, velocity), null, 4))
 };
 app.get('/storeping', storePing);
@@ -285,19 +285,19 @@ const register = async (req, res) => {
 
     // Verify all fields were properly filled
     if (!(username && password && first_name && last_name)) {
-		//============== Check if the username is already taken =============== //
-		if(!dbApi.userNameExists(username)) {
-		    let hashedPassword = hashPassword(password);
-	        var userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
-			if(userAdded){
-				res.json({status: "success"});
-			} else {
-				res.json({status: "failure"});
-			}
-		} else {
+        //============== Check if the username is already taken =============== //
+        if(!dbApi.userNameExists(username)) {
+            let hashedPassword = hashPassword(password);
+            var userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+            if(userAdded){
+                res.json({status: "success"});
+            } else {
+                res.json({status: "failure"});
+            }
+        } else {
             res.json({status: "username exist"});
         };
-	}
+    }
     else res.status(400).send("Please fill out all available fields.");
 };
 
@@ -307,14 +307,14 @@ const login = async (req, res) => {
 
     if (username && password) {
         if(dbApi.userNameExists(username)) {
-			let hashedPassword = hashPassword(password);
+            let hashedPassword = hashPassword(password);
             let dbUser = dbApi.getUserByPassword(hashedPassword);
-			if(dbUser.username === username) {
+            if(dbUser.username === username) {
                 dbApi.loginUser(username, hashedPassword);
                 res.sendStatus(200);
             } else res.send("The username and password combination provided was invalid.");
         } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
-	} else res.send("Please fill out all available fields.");
+    } else res.send("Please fill out all available fields.");
 };
 
 const logout = async (req, res) => {
@@ -467,7 +467,7 @@ function generateTempPassword() {
 
 function hashPassword(password) {
     console.log(`Hash the password: ${password}`)
-	return password;
+    return password;
 }
 
 //====== Start listening on whatever port ======
