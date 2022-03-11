@@ -22,9 +22,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -154,6 +154,13 @@ async function dbInit(){
     dbApi.deleteTracker = (trackerId) => {
         console.log(`Deleting the tracker with trackerId: ${trackerId}`);
         return true;
+    };
+
+    // TODO: Register the Base Station using the provided arguments
+    dbApi.registerBaseStation = (name, location, description) => {
+        console.log(`Registering the base station with name: ${name}, location: ${location} and description: ${description}`);
+        let stationId = 8675309;
+        return stationId;
     };
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
@@ -414,7 +421,16 @@ const deleteTracker = async (req, res) => {
 
 //====== Base Station Controller Functions ======
 const registerBaseStation = async (req, res) => {
-
+    let { name, location, description } = req.body;
+    if(!name || !location) {
+        res.status(400).send("Please fill out all available fields.");
+    }
+    let stationId = dbApi.registerBaseStation(name, location, description);
+    if(stationId) {
+        return res.status(200).send(`Successfully registered base station: ${stationId}`);
+    } else {
+        return res.status(418).send("An error occurred attempting to register your base station.");
+    }
 };
 
 const getBaseStations = async (req, res) => {
