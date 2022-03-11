@@ -124,6 +124,22 @@ async function dbInit(){
     //Store the uuid and animalId in the Tracker table and return the generated trackerId
     dbApi.registerTracker = (uuid, animalId) => exec('INSERT INTO public.trackers (animalid, trackeruuid) VALUES($1, $2) RETURNING trackerid;',[uuid, animalId]);
 
+    // TODO: Get all trackers from DB matching animalId and uuid provided (optionally provided by the user)
+    dbApi.getTrackers = (animalId, uuid) => {
+        console.log(`Getting the trackers matching the animalId: ${animalId} and the uuid: ${uuid}...`)
+        let trackers = {
+            tracker1: {
+                animalId: "monkey_01",
+                uuid: "8675309"
+            },
+            tracker2: {
+                animalId: "monkey_01",
+                uuid: "8675309"
+            }
+        }
+        return trackers;
+    }
+
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
         // A sample object containing multiple pings
@@ -350,7 +366,9 @@ const registerTracker = async (req, res) => {
 };
 
 const getTrackers = async (req, res) => {
-
+    let { animalId, uuid } = req.params;
+    let trackers = dbApi.getTrackers(animalId, uuid);
+    res.status(200).send(`Tracker(s): ${JSON.stringify(trackers)} matching animalId: ${animalId} and uuid: ${uuid}...`);
 };
 
 const updateTracker = async (req, res) => {
@@ -402,7 +420,7 @@ app.put('/update-password/:tempPassword', updatePassword);
 
 //======= Tracker Routes ======
 app.post('/trackers', registerTracker);
-app.get('/trackers', getTrackers);
+app.get('/trackers/:animalId?/:uuid?', getTrackers);
 app.put('/trackers', updateTracker);
 app.delete('/trackers', deleteTracker);
 
