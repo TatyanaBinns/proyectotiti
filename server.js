@@ -140,6 +140,22 @@ async function dbInit(){
         return trackers;
     }
 
+    // TODO: Update the tracker with the trackerid provided using the new_uuid and/or new_animalId
+    dbApi.updateTracker = (trackerId, new_uuid, new_animalId) => {
+        console.log(`Updating the trackers matching the trackerId: ${trackerId}...`)
+        let tracker = {
+            animalId: new_animalId,
+            uuid: new_uuid
+        };
+        return tracker;
+    };
+
+    // TODO: Remove the tracker with the provided trackerId from the DB table of trackers
+    dbApi.deleteTracker = (trackerId) => {
+        console.log(`Deleting the tracker with trackerId: ${trackerId}`);
+        return true;
+    };
+
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
         // A sample object containing multiple pings
@@ -372,11 +388,28 @@ const getTrackers = async (req, res) => {
 };
 
 const updateTracker = async (req, res) => {
-
+    let {trackerId, new_uuid, new_animalId} = req.body;
+    if(trackerId && (new_uuid || new_animalId)) {
+        let newTracker = dbApi.updateTracker(trackerId, new_uuid, new_animalId);
+        res.status(200).send(`Tracker with trackerid: ${trackerId} updated to ${JSON.stringify(newTracker)}`);
+    } else {
+        res.status(400).send(`Please provide the trackerid and either a new animalId or a new uuid.`);
+    }
 };
 
+// TODO: Should only Admin users be able to delete trackers?
 const deleteTracker = async (req, res) => {
-
+    let admin_uid = req.body, trackerId = req.params;
+    if(!admin_uid) {
+        res.status(400).send("Please fill out all available fields.");
+    } else {
+        if(await dbApi.isAdmin(admin_uid)){
+            dbApi.deleteTracker(trackerId);
+            res.status(200).send(JSON.stringify(`Successfully deleted the tracker with trackerId: ${trackerId}.`));
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
 };
 
 //====== Base Station Controller Functions ======
@@ -422,7 +455,7 @@ app.put('/update-password/:tempPassword', updatePassword);
 app.post('/trackers', registerTracker);
 app.get('/trackers/:animalId?/:uuid?', getTrackers);
 app.put('/trackers', updateTracker);
-app.delete('/trackers', deleteTracker);
+app.delete('/trackers/:trackerId', deleteTracker);
 
 //======= Base Station Routes ======
 app.post('/base-station', registerBaseStation);
