@@ -152,17 +152,12 @@ async function dbInit(){
     
     
     
-    // TODO: Remove the user with the given uid from the DB
-    dbApi.deleteUser = (uid) => {
-        console.log(`Deleting the user with uid:${uid}`);
-    };
+    //Remove the user with the given uid from the DB
+    dbApi.deleteUser = (uid) => exec("DELETE FROM public.users WHERE uid= $1",[uid]);
 
-    // TODO: Store the uuid and animalId in the Tracker table and return the generated trackerId
-    dbApi.registerTracker = (uuid, animalId) => {
-        console.log(`Registering the tracker with uuid: ${uuid} for the animal with animalId: ${animalId}`);
-        // Return the trackerId
-        return uuid;
-    };
+    //Store the uuid and animalId in the Tracker table and return the generated trackerId
+    dbApi.registerTracker = (uuid, animalId) => exec('INSERT INTO public.trackers (animalid, trackeruuid) VALUES($1, $2) RETURNING trackerid;',[uuid, animalId]);
+
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
