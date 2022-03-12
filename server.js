@@ -22,9 +22,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                // ssl: {
+                //     rejectUnauthorized: false
+                // }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -193,6 +193,11 @@ async function dbInit(){
             description: new_description
         };
         return baseStation;
+    };
+
+    dbApi.deleteBaseStation = (stationId) => {
+        console.log(`Deleting the base station with stationId: ${stationId}`);
+        return true;
     };
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
@@ -436,7 +441,7 @@ const updateTracker = async (req, res) => {
     }
 };
 
-// TODO: Should only Admin users be able to delete trackers?
+// TODO: Make this work with new DB API logic
 const deleteTracker = async (req, res) => {
     let admin_uid = req.body, trackerId = req.params;
     if(!admin_uid) {
@@ -481,8 +486,19 @@ const updateBaseStation = async (req, res) => {
     }
 };
 
-const deleteBaseStation= async (req, res) => {
-
+// TODO: Make this work with new DB API logic
+const deleteBaseStation = async (req, res) => {
+    let admin_uid = req.body, stationId = req.params;
+    if(!admin_uid) {
+        res.status(400).send("Please fill out all available fields.");
+    } else {
+        if(await dbApi.isAdmin(admin_uid)){
+            dbApi.deleteBaseStation(stationId);
+            res.status(200).send(JSON.stringify(`Successfully deleted the tracker with stationId: ${stationId}.`));
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
 };
 
 //====== Ping Controller Functions ======
