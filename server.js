@@ -22,9 +22,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                // ssl: {
-                //     rejectUnauthorized: false
-                // }
+                ssl: {
+                    rejectUnauthorized: false
+                }
             });
             console.log("Connecting to database...");
             await c.connect();
