@@ -22,9 +22,9 @@ async function dbInit(){
         try{
             c = new Client({
                 connectionString: uri,
-                // ssl: {
-                //     rejectUnauthorized: false
-                // }
+                ssl: {
+                    rejectUnauthorized: false
+                }
             });
             console.log("Connecting to database...");
             await c.connect();
@@ -161,6 +161,43 @@ async function dbInit(){
         console.log(`Registering the base station with name: ${name}, location: ${location} and description: ${description}`);
         let stationId = 8675309;
         return stationId;
+    };
+
+    // TODO: Get all base stations from the database matching the provided location and name (if any provided)
+    dbApi.getBaseStations = (location, name) => {
+        console.log(`Getting base station(s) matching location: ${location} and name: ${name}...`);
+        // Example base station
+        let baseStations = {
+            baseStation1: {
+                stationId: "1234567",
+                name: "BaseStation_01",
+                location: "(3.14159, 3.14159)",
+                description: "The very first base station."
+            },
+            baseStation2: {
+                stationId: "8675309",
+                name: "BaseStation_02",
+                location: "(3.14159, 3.14159)",
+                description: "The very second base station."
+            }
+        }
+        return baseStations;
+    };
+
+    // TODO: Update the name, location and/or description of the base station matching the provided stationId
+    dbApi.updateBaseStation = (stationId, new_name, new_location, new_description) => {
+        console.log(`Updating the base station matching the stationId: ${stationId}...`)
+        let baseStation = {
+            name: new_name,
+            location: new_location,
+            description: new_description
+        };
+        return baseStation;
+    };
+
+    dbApi.deleteBaseStation = (stationId) => {
+        console.log(`Deleting the base station with stationId: ${stationId}`);
+        return true;
     };
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
@@ -326,7 +363,7 @@ const logout = async (req, res) => {
 const forgotPassword = async (req, res) => {
     let { email } = req.body;
     let token = generateTempPassword();
-    dbApi.updatePassword(email, token);
+    await dbApi.updatePassword(email, token);
 
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
@@ -404,7 +441,7 @@ const updateTracker = async (req, res) => {
     }
 };
 
-// TODO: Should only Admin users be able to delete trackers?
+// TODO: Make this work with new DB API logic
 const deleteTracker = async (req, res) => {
     let admin_uid = req.body, trackerId = req.params;
     if(!admin_uid) {
@@ -434,15 +471,34 @@ const registerBaseStation = async (req, res) => {
 };
 
 const getBaseStations = async (req, res) => {
-
+    let { location, name } = req.params;
+    let baseStations = dbApi.getBaseStations(location, name);
+    res.status(200).send(`Base Station(s): ${JSON.stringify(baseStations)}`);
 };
 
 const updateBaseStation = async (req, res) => {
-
+    let {stationId, new_name, new_location, new_description} = req.body;
+    if(stationId && (new_name || new_location || new_description)) {
+        let newBaseStation = dbApi.updateBaseStation(stationId, new_name, new_location, new_description);
+        res.status(200).send(`Base Station with stationid: ${stationId} updated to ${JSON.stringify(newBaseStation)}`);
+    } else {
+        res.status(400).send(`Please provide the trackerid and either a new animalId or a new uuid.`);
+    }
 };
 
-const deleteBaseStation= async (req, res) => {
-
+// TODO: Make this work with new DB API logic
+const deleteBaseStation = async (req, res) => {
+    let admin_uid = req.body, stationId = req.params;
+    if(!admin_uid) {
+        res.status(400).send("Please fill out all available fields.");
+    } else {
+        if(await dbApi.isAdmin(admin_uid)){
+            dbApi.deleteBaseStation(stationId);
+            res.status(200).send(JSON.stringify(`Successfully deleted the tracker with stationId: ${stationId}.`));
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
 };
 
 //====== Ping Controller Functions ======
@@ -474,10 +530,10 @@ app.put('/trackers', updateTracker);
 app.delete('/trackers/:trackerId', deleteTracker);
 
 //======= Base Station Routes ======
-app.post('/base-station', registerBaseStation);
-app.get('/base-station', getBaseStations);
-app.put('/base-station', updateBaseStation);
-app.delete('/base-station', deleteBaseStation);
+app.post('/base-stations', registerBaseStation);
+app.get('/base-stations/:location?/:name?', getBaseStations);
+app.put('/base-stations', updateBaseStation);
+app.delete('/base-stations/:stationId', deleteBaseStation);
 
 //======= Ping Routes ======
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
