@@ -163,6 +163,38 @@ async function dbInit(){
         return stationId;
     };
 
+    // TODO: Get all base stations from the database matching the provided location and name (if any provided)
+    dbApi.getBaseStations = (location, name) => {
+        console.log(`Getting base station(s) matching location: ${location} and name: ${name}...`);
+        // Example base station
+        let baseStations = {
+            baseStation1: {
+                stationId: "1234567",
+                name: "BaseStation_01",
+                location: "(3.14159, 3.14159)",
+                description: "The very first base station."
+            },
+            baseStation2: {
+                stationId: "8675309",
+                name: "BaseStation_02",
+                location: "(3.14159, 3.14159)",
+                description: "The very second base station."
+            }
+        }
+        return baseStations;
+    };
+
+    // TODO: Update the name, location and/or description of the base station matching the provided stationId
+    dbApi.updateBaseStation = (stationId, new_name, new_location, new_description) => {
+        console.log(`Updating the base station matching the stationId: ${stationId}...`)
+        let baseStation = {
+            name: new_name,
+            location: new_location,
+            description: new_description
+        };
+        return baseStation;
+    };
+
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
         // A sample object containing multiple pings
@@ -326,7 +358,7 @@ const logout = async (req, res) => {
 const forgotPassword = async (req, res) => {
     let { email } = req.body;
     let token = generateTempPassword();
-    dbApi.updatePassword(email, token);
+    await dbApi.updatePassword(email, token);
 
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
@@ -434,11 +466,19 @@ const registerBaseStation = async (req, res) => {
 };
 
 const getBaseStations = async (req, res) => {
-
+    let { location, name } = req.params;
+    let baseStations = dbApi.getBaseStations(location, name);
+    res.status(200).send(`Base Station(s): ${JSON.stringify(baseStations)}`);
 };
 
 const updateBaseStation = async (req, res) => {
-
+    let {stationId, new_name, new_location, new_description} = req.body;
+    if(stationId && (new_name || new_location || new_description)) {
+        let newBaseStation = dbApi.updateBaseStation(stationId, new_name, new_location, new_description);
+        res.status(200).send(`Base Station with stationid: ${stationId} updated to ${JSON.stringify(newBaseStation)}`);
+    } else {
+        res.status(400).send(`Please provide the trackerid and either a new animalId or a new uuid.`);
+    }
 };
 
 const deleteBaseStation= async (req, res) => {
@@ -474,10 +514,10 @@ app.put('/trackers', updateTracker);
 app.delete('/trackers/:trackerId', deleteTracker);
 
 //======= Base Station Routes ======
-app.post('/base-station', registerBaseStation);
-app.get('/base-station', getBaseStations);
-app.put('/base-station', updateBaseStation);
-app.delete('/base-station', deleteBaseStation);
+app.post('/base-stations', registerBaseStation);
+app.get('/base-stations/:location?/:name?', getBaseStations);
+app.put('/base-stations', updateBaseStation);
+app.delete('/base-stations/:stationId', deleteBaseStation);
 
 //======= Ping Routes ======
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
