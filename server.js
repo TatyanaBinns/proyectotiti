@@ -13,6 +13,7 @@ let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
 
+
 //===== Setup the database connection and access functions
 dbApi = { };
 async function dbInit(){
