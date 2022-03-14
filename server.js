@@ -9,12 +9,6 @@ let port = process.env.PORT;
 if (port == null || port == "")
   port = 8080;
 
-app.use(express.static(path.resolve(__dirname, '../realproject/build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../realproject/build', 'index.html'));
-});
-
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
