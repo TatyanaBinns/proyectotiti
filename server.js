@@ -13,16 +13,6 @@ let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
 
-if (process.env.NODE_ENV === 'production') 
-{
-  // Set static folder
-  app.use(express.static('front-end/build'));
-  app.get('*', (req, res) => 
- {
-    res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
-  });
-}
-
 //===== Setup the database connection and access functions
 dbApi = { };
 async function dbInit(){
