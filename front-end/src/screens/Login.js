@@ -24,7 +24,7 @@ function Login() {
       {
         axios.get(`https://proyectotiti.herokuapp.com/listpings`)
           .then(function (response) {
-            console.log(response);
+            console.log("Hi from login Axios call");
           })
         localStorage.setItem('username', username);
         navigate("/home");
