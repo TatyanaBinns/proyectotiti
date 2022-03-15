@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
+const cors = require('cors');
+const path = require('path'); 
 
 
 //===== Pull in environment variables from Heroku
@@ -237,6 +239,32 @@ app.use(bodyParser.json())
 app.use(bodyParser.text({
     type: "*/*"
 }));
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use((req, res, next) => 
+{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, DELETE, OPTIONS'
+  );
+  next();
+});
+
+if (process.env.NODE_ENV === 'production') 
+{
+  // Set static folder
+  app.use(express.static('front-end/build'));
+  app.get('*', (req, res) => 
+ {
+    res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
+  });
+}
 
 
 //============ Initialize endpoints ============
