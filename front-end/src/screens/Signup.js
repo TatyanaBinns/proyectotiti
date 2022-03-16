@@ -12,7 +12,7 @@ function Signup() {
   const [username, setUsername] = useState("");
 
   const submitForm = () => {
-      console.log(password)
+      console.log("I changed!!!");
   };
   
   return (    
