@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
+const cors = require('cors');
 
 
 //===== Pull in environment variables from Heroku
@@ -228,6 +229,14 @@ dbInit().catch(err => console.log(err));
 
 const app = express();
 const path = require('path');
+app.use(bodyParser.json());
+app.use((req, res, next) => 
+{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS');
+  next();
+});
 
 app.use(express.static(path.join(__dirname, 'front-end/build')));
 
