@@ -1,7 +1,6 @@
 import './styles.css';
 import {Box, Button, TextField,Typography} from '@material-ui/core';
 import React, { useState } from "react";
-import axios from "axios";
 
 
 function Signup() {
@@ -11,22 +10,9 @@ function Signup() {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [username, setUsername] = useState("");
-  const axios = require('axios');
-  
+
   const submitForm = () => {
-     console.log("I changed");
-     axios.post('https://proyectotiti.herokuapp.com/register', null, {
-                params: 
-                {
-                        username: username,
-                        password: password,
-                        first_name: fname,
-                        last_name: lname,
-                },
-            })
-    .then(function (response) {
-      console.log(response);
-    })
+      console.log(password)
   };
   
   return (    
