@@ -10,9 +10,18 @@ function Signup() {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [username, setUsername] = useState("");
-
+  const axios = require('axios');
+  
   const submitForm = () => {
-      console.log(password)
+    axios.post('https://proyectotiti.herokuapp.com/register', {
+      username: username,
+      password: password,
+      first_name: fname,
+      last_name: lname
+    })
+    .then(function (response) {
+      console.log(response);
+    })
   };
   
   return (    
