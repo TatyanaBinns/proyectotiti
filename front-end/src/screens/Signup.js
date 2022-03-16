@@ -14,12 +14,15 @@ function Signup() {
   const axios = require('axios');
   
   const submitForm = () => {
-    axios.post('https://proyectotiti.herokuapp.com/register', {
-      username: username,
-      password: password,
-      first_name: fname,
-      last_name: lname
-    })
+     await axios.post('https://proyectotiti.herokuapp.com/register', null, {
+                params: 
+                {
+                        username: username,
+                        password: password,
+                        first_name: fname,
+                        last_name: lname,
+                },
+            })
     .then(function (response) {
       console.log(response);
     })
