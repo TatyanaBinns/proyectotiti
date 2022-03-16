@@ -15,7 +15,7 @@ function Signup() {
   
   const submitForm = () => {
      console.log("I changed");
-     await axios.post('https://proyectotiti.herokuapp.com/register', null, {
+     axios.post('https://proyectotiti.herokuapp.com/register', null, {
                 params: 
                 {
                         username: username,
