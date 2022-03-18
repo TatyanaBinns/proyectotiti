@@ -1,6 +1,7 @@
 import './styles.css';
 import {Box, Button, TextField,Typography} from '@material-ui/core';
 import React, { useState } from "react";
+import axios from "axios";
 
 
 function Signup() {
@@ -12,7 +13,10 @@ function Signup() {
   const [username, setUsername] = useState("");
 
   const submitForm = () => {
-      console.log("I changed!!!");
+      axios.get(`https://proyectotiti.herokuapp.com/`)
+          .then(function (response) {
+            console.log("response);
+          })
   };
   
   return (    
