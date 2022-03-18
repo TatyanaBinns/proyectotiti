@@ -22,13 +22,16 @@ function Login() {
         }
       else
       {
-        axios.get(`https://proyectotiti.herokuapp.com/listpings`)
+        axios.post('https://proyectotiti.herokuapp.com/login', {
+        username, password
+      })
           .then(function (response) {
-            console.log("Hi from login Axios call");
-          })
-        localStorage.setItem('username', username);
-        navigate("/home");
-        
+            if(response.data.status == "success")
+            {
+              localStorage.setItem('username', username);
+              navigate("/home");
+            }
+          })       
       }
     };
     
