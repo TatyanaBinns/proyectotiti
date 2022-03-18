@@ -14,10 +14,7 @@ function Signup() {
 
   const submitForm = () => {
       axios.post('https://proyectotiti.herokuapp.com/register', {
-        username: username,
-        password: password,
-        first_name: fname,
-        last_name: lname
+        username, password, fname, lname
       })
           .then(function (response) {
             console.log(response);
