@@ -3,7 +3,6 @@ const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
 
-
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
 if (port == null || port == "")
