@@ -31,6 +31,10 @@ function Login() {
               localStorage.setItem('username', username);
               navigate("/home");
             }
+            else
+              {
+                console.log(response);
+              }
           })       
       }
     };
