@@ -15,7 +15,7 @@ function Signup() {
   const submitForm = () => {
       //axios.get(`https://proyectotiti.herokuapp.com/listpings`)
           //.then(function (response) {
-            console.log("I am the newest working model");
+            console.log("I am the new");
             //console.log(response);
           //})
   };
