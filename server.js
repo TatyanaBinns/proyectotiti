@@ -229,7 +229,6 @@ dbInit().catch(err => console.log(err));
 const app = express();
 const path = require('path');
 
-app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 if(process.env.NODE_ENV === 'production') 
 {  
