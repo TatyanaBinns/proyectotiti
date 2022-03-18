@@ -13,9 +13,13 @@ function Signup() {
   const [username, setUsername] = useState("");
 
   const submitForm = () => {
-      axios.get(`https://proyectotiti.herokuapp.com/listpings`)
+      axios.post('https://proyectotiti.herokuapp.com/register', {
+        username: username,
+        password: password,
+        first_name: fname,
+        last_name: lname
+      })
           .then(function (response) {
-            console.log("plz just work");
             console.log(response);
           })
   };
