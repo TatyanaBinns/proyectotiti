@@ -229,8 +229,7 @@ dbInit().catch(err => console.log(err));
 const app = express();
 const path = require('path');
 
-app.get('*', (req, res) => {  res.sendFile(path.join(__dirname + '/front-end/public/index.html'));});
-
+app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -245,7 +244,6 @@ app.use(bodyParser.text({
 
 
 //============ Initialize endpoints ============
-
 app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
 });
