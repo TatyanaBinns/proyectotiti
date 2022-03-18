@@ -549,7 +549,6 @@ app.delete('/base-stations/:stationId', deleteBaseStation);
 //======= Ping Routes ======
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
 
-
 app.get('*', (req, res) => {  res.sendFile(path.join(__dirname+'/front-end/public/index.html'));});
 
 
