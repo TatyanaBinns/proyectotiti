@@ -15,7 +15,7 @@ function Signup() {
   const submitForm = () => {
       axios.get(`https://proyectotiti.herokuapp.com/listpings`)
           .then(function (response) {
-            console.log("please still work I beg");
+            console.log("plz just work");
             console.log(response);
           })
   };

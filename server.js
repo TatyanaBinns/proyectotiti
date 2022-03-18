@@ -229,6 +229,7 @@ dbInit().catch(err => console.log(err));
 const app = express();
 const path = require('path');
 
+app.use(express.static(path.join(__dirname, 'front-end/build'))); 
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -540,14 +541,10 @@ app.delete('/base-stations/:stationId', deleteBaseStation);
 
 //======= Ping Routes ======
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
-
-if(process.env.NODE_ENV === 'production') 
-{  
-  app.use(express.static(path.join(__dirname, 'front-end/build')));  
-  app.get('*', (req, res) => {    
-    res.sendfile(path.join(__dirname = 'front-end/build/index.html'));  
+ 
+app.get('*', (req, res) => {    
+    res.sendfile(path.join(__dirname, 'front-end/build','index.html'));  
   })
-}
 
 
 //====== Helper Functions ======
