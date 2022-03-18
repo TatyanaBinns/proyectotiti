@@ -228,12 +228,13 @@ dbInit().catch(err => console.log(err));
 const app = express();
 const path = require('path');
 
+app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 if(process.env.NODE_ENV === 'production') 
 {  
   app.use(express.static(path.join(__dirname, 'front-end/build')));  
   app.get('*', (req, res) => {    
-    res.sendfile(path.join(__dirname, 'front-end','build','index.html'));  
+    res.sendfile(path.join(__dirname = 'front-end/build/index.html'));  
   })
 }
 
