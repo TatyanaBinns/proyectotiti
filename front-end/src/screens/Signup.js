@@ -13,11 +13,11 @@ function Signup() {
   const [username, setUsername] = useState("");
 
   const submitForm = () => {
-      axios.get(`https://proyectotiti.herokuapp.com/listpings`)
-          .then(function (response) {
-            console.log("I changed");
-            console.log(response);
-          })
+      //axios.get(`https://proyectotiti.herokuapp.com/listpings`)
+          //.then(function (response) {
+            console.log("I work again");
+            //console.log(response);
+          //})
   };
   
   return (    
