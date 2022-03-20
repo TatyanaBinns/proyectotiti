@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
-
+const jwt = require('jsonwebtoken');
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -12,6 +12,10 @@ if (port == null || port == "")
 let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
+
+let JWT_PASSPHRASE = process.env.JWT_SECRET
+if(JWT_PASSPHRASE == null || JWT_PASSPHRASE == "")
+    JWT_PASSPHRASE = 'aRaNd0mPa$$phra$3';
 
 //===== Setup the database connection and access functions
 dbApi = { };
@@ -74,11 +78,15 @@ async function dbInit(){
 
     // TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
-        // Generate token
+        // TODO: Check the hashedPassword against the DB
 
-        // Store token
+        // Generate token
+        const token = jwt.sign(
+            { username: username, dateCreated: Date.now()},
+            JWT_PASSPHRASE
+        );
         // Return token
-        return true;
+        return token;
     };
 
     // TODO: Log the user in and out by toggling a boolean field
@@ -248,7 +256,6 @@ app.use(bodyParser.text({
 
 
 //============ Initialize endpoints ============
-
 app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
 });
@@ -280,9 +287,10 @@ app.get('/listlogs', async (req, res) => {
 //====== Admin Controller Functions ======
 const getUsers = async (req, res) => {
     let uid = req.params.uid;
+    let cookieChecked = cookieCheck(req.cookie);
     if(dbApi.isAdmin(uid)){
         let users = dbApi.getUsers();
-        res.status(200).send(JSON.stringify(users));
+        res.status(200).send(JSON.stringify(users + cookieChecked));
     } else {
         res.status(403).send('You do not have permission to view this page.');
     }
@@ -329,7 +337,7 @@ const register = async (req, res) => {
         //============== Check if the username is already taken =============== //
         if(!dbApi.userNameExists(username)) {
             let hashedPassword = hashPassword(password);
-            var userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+            let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
             if(userAdded){
                 res.json({status: "success"});
             } else {
@@ -351,8 +359,9 @@ const login = async (req, res) => {
             let hashedPassword = hashPassword(password);
             let dbUser = dbApi.getUserByPassword(hashedPassword);
             if(dbUser.username === username) {
-                dbApi.loginUser(username, hashedPassword);
-                res.sendStatus(200);
+                let jwToken = dbApi.loginUser(username, hashedPassword);
+                // persist the token as 'Q' in cookie with expiry date
+                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).status(200);
             } else res.send("The username and password combination provided was invalid.");
         } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
     } else res.send("Please fill out all available fields.");
@@ -415,7 +424,7 @@ const updatePassword = async (req, res) => {
     let { new_password } = req.body, tempPassword = req.params.tempPassword;
     let hashedNewPassword = hashPassword(new_password);
     let user = dbApi.getUserByPassword(tempPassword);
-    dbApi.updatePassword(user.email, hashedNewPassword);
+    await dbApi.updatePassword(user.email, hashedNewPassword);
     res.status(200).send("Successfully updated your password.");
 };
 
@@ -560,6 +569,14 @@ function generateTempPassword() {
 function hashPassword(password) {
     console.log(`Hash the password: ${password}`)
     return password;
+}
+
+function cookieCheck(jwToken) {
+    let decoded = jwt.verify(jwToken, JWT_PASSPHRASE);
+    if(!decoded) {
+        return(false);
+    }
+    return decoded;
 }
 
 //====== Start listening on whatever port ======
