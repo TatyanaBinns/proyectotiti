@@ -339,7 +339,7 @@ const register = async (req, res) => {
             let hashedPassword = hashPassword(password);
             let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
             if(userAdded){
-                res.json({status: "success"});
+                res.json({body: JSON.stringify(req.body), status: "success"});
             } else {
                 res.json({status: "failure"});
             }
@@ -347,7 +347,7 @@ const register = async (req, res) => {
             res.json({status: "username exist"});
         };
     }
-    else res.status(400).send("Please fill out all available fields.");
+    else res.status(400).send("Please fill out all available fields." + JSON.stringify(req.body));
 };
 
 
