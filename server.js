@@ -48,8 +48,12 @@ async function dbInit(){
      *             query. Should be an array.
      */
     async function exec(query, values){
-        if(client && client.query)
-            return (await client.query(query, values)).rows;
+        if(client && client.query) {
+            console.log("Running query: \n"+query);
+            var res = (await client.query(query, values));
+            console.log ("Result: \n"+JSON.stringify(res.rows));
+            return res.rows;
+        }
         console.log("\nWould be running query: \n"+query);
         if(values)
             console.log("With Values: \n"+JSON.stringify(values));
