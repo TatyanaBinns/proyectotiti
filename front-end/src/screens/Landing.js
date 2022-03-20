@@ -12,7 +12,7 @@ function Landing() {
           <div className='Button-top'>
             
             <Link to="/login">
-              <Button color="primary" variant="contained" size='large' style={{maxWidth: '200px', maxHeight: '50px', minWidth: '200px', minHeight: '50px',backgroundColor: "#284c20"}}>
+              <Button color="primary" variant="contained" size='large' style={{maxWidth: '200px', maxHeight: '50px', minWidth: '200px', minHeight: '50px',backgroundColor: "#299846"}}>
               Login
               </Button>
             </Link>
@@ -22,7 +22,7 @@ function Landing() {
           <div className='Button-bottom'>
             
             <Link to="/signup">
-              <Button color="primary" variant="contained" size='large' style={{maxWidth: '200px', maxHeight: '50px', minWidth: '200px', minHeight: '50px',backgroundColor: "#284c20"}}>
+              <Button color="primary" variant="contained" size='large' style={{maxWidth: '200px', maxHeight: '50px', minWidth: '200px', minHeight: '50px',backgroundColor: "#299846"}}>
               Sign Up
               </Button>
             </Link>
