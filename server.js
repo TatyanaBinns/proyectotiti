@@ -369,12 +369,12 @@ const login = async (req, res) => {
     console.log('Password: ' +JSON.stringify(password));
     console.log('Body: ' +JSON.stringify(req.body));
     if (username && password) {
-        if(dbApi.userNameExists(username)) {
+        if(await dbApi.userNameExists(username)) {
             let hashedPassword = hashPassword(password);
-            if(dbApi.verifyCredentials(hashedPassword, password)) {
+            if(await dbApi.verifyCredentials(hashedPassword, password)) {
                 let jwToken = dbApi.loginUser(username, hashedPassword);
                 // persist the token as 'Q' in cookie with expiry date
-                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).status(200);
+                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).sendStatus(200);
             } else res.status(400).send("The username and password combination provided was invalid.");
         } else res.status(400).send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
     } else res.status(400).send("Please fill out all available fields.");
