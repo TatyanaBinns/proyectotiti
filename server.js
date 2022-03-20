@@ -83,7 +83,7 @@ async function dbInit(){
         // Generate token
         const token = jwt.sign(
             { username: username, dateCreated: Date.now()},
-            process.env.JWT_SECRET
+            JWT_PASSPHRASE
         );
         // Return token
         return token;
@@ -256,7 +256,6 @@ app.use(bodyParser.text({
 
 
 //============ Initialize endpoints ============
-
 app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
 });
@@ -288,9 +287,10 @@ app.get('/listlogs', async (req, res) => {
 //====== Admin Controller Functions ======
 const getUsers = async (req, res) => {
     let uid = req.params.uid;
+    let cookieChecked = cookieCheck(req.cookie);
     if(dbApi.isAdmin(uid)){
         let users = dbApi.getUsers();
-        res.status(200).send(JSON.stringify(users));
+        res.status(200).send(JSON.stringify(users + cookieChecked));
     } else {
         res.status(403).send('You do not have permission to view this page.');
     }
@@ -337,7 +337,7 @@ const register = async (req, res) => {
         //============== Check if the username is already taken =============== //
         if(!dbApi.userNameExists(username)) {
             let hashedPassword = hashPassword(password);
-            var userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+            let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
             if(userAdded){
                 res.json({status: "success"});
             } else {
@@ -424,7 +424,7 @@ const updatePassword = async (req, res) => {
     let { new_password } = req.body, tempPassword = req.params.tempPassword;
     let hashedNewPassword = hashPassword(new_password);
     let user = dbApi.getUserByPassword(tempPassword);
-    dbApi.updatePassword(user.email, hashedNewPassword);
+    await dbApi.updatePassword(user.email, hashedNewPassword);
     res.status(200).send("Successfully updated your password.");
 };
 
@@ -569,6 +569,14 @@ function generateTempPassword() {
 function hashPassword(password) {
     console.log(`Hash the password: ${password}`)
     return password;
+}
+
+function cookieCheck(jwToken) {
+    let decoded = jwt.verify(jwToken, JWT_PASSPHRASE);
+    if(!decoded) {
+        return(false);
+    }
+    return decoded;
 }
 
 //====== Start listening on whatever port ======
