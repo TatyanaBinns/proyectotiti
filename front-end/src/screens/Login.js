@@ -21,6 +21,11 @@ function Login() {
           console.log("Required")
         }
       else
+        {
+          navigate("/home");
+        } 
+      /*
+        else
       {
         axios.post('https://proyectotiti.herokuapp.com/login', {
         username, password
@@ -37,6 +42,7 @@ function Login() {
               }
           })       
       }
+      */
     };
     
     return (
@@ -73,7 +79,7 @@ function Login() {
             color="primary"
             fullWidth
             style={{
-              backgroundColor: "#4cc638",
+              backgroundColor: "#284c20",
             }}
             margin = "normal"
             className="form-input"
