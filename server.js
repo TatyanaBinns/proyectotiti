@@ -353,7 +353,9 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { username, password } = req.body;
-
+    console.log('Logging in user: ' + JSON.stringify(username));
+    console.log('Password: ' +JSON.stringify(password));
+    console.log('Body: ' +JSON.stringify(req.body));
     if (username && password) {
         if(dbApi.userNameExists(username)) {
             let hashedPassword = hashPassword(password);
