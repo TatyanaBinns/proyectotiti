@@ -371,8 +371,7 @@ const login = async (req, res) => {
     if (username && password) {
         if(dbApi.userNameExists(username)) {
             let hashedPassword = hashPassword(password);
-            let dbUser = dbApi.getUserByPassword(hashedPassword);
-            if(dbUser.username === username) {
+            if(dbApi.verifyCredentials(hashedPassword, password)) {
                 let jwToken = dbApi.loginUser(username, hashedPassword);
                 // persist the token as 'Q' in cookie with expiry date
                 res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).status(200);
