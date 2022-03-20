@@ -74,6 +74,10 @@ async function dbInit(){
 
     // TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
+        // Generate token
+
+        // Store token
+        // Return token
         return true;
     };
 
