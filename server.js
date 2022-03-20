@@ -357,7 +357,7 @@ const register = async (req, res) => {
             }
         } else {
             res.json({status: "username exist"});
-        };
+        }
     }
     else res.status(400).send("Please fill out all available fields." + JSON.stringify(req.body));
 };
