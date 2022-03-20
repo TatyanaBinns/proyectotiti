@@ -343,7 +343,7 @@ const register = async (req, res) => {
     // Verify all fields were properly filled
     if (!(username && password && first_name && last_name)) {
         //============== Check if the username is already taken =============== //
-        if(!dbApi.userNameExists(username)) {
+        if(!(await dbApi.userNameExists(username))) {
             let hashedPassword = hashPassword(password);
             let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
             if(userAdded){
@@ -372,9 +372,9 @@ const login = async (req, res) => {
                 let jwToken = dbApi.loginUser(username, hashedPassword);
                 // persist the token as 'Q' in cookie with expiry date
                 res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).status(200);
-            } else res.send("The username and password combination provided was invalid.");
-        } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
-    } else res.send("Please fill out all available fields.");
+            } else res.status(400).send("The username and password combination provided was invalid.");
+        } else res.status(400).send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
+    } else res.status(400).send("Please fill out all available fields.");
 };
 
 const logout = async (req, res) => {
@@ -551,12 +551,16 @@ app.post('/forgot-password', forgotPassword);
 app.put('/update-password/:tempPassword', updatePassword);
 
 //======= Tracker Routes ======
+// TODO: Create endpoint to link the uuid to animal ID with datetime
+// TODO: Create endpoint to get history of the tracker
+// TODO: Create endpoint to update the tracker
 app.post('/trackers', registerTracker);
 app.get('/trackers/:animalId?/:uuid?', getTrackers);
 app.put('/trackers', updateTracker);
 app.delete('/trackers/:trackerId', deleteTracker);
 
 //======= Base Station Routes ======
+// TODO: Create endpoint
 app.post('/base-stations', registerBaseStation);
 app.get('/base-stations/:location?/:name?', getBaseStations);
 app.put('/base-stations', updateBaseStation);
