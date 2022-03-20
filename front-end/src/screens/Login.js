@@ -20,11 +20,6 @@ function Login() {
         {
           console.log("Required")
         }
-      else
-        {
-          navigate("/home");
-        } 
-      /*
         else
       {
         axios.post('https://proyectotiti.herokuapp.com/login', {
@@ -42,7 +37,6 @@ function Login() {
               }
           })       
       }
-      */
     };
     
     return (
