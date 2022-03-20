@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
-
+const jwt = require('jsonwebtoken');
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -74,11 +74,15 @@ async function dbInit(){
 
     // TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
-        // Generate token
+        // TODO: Check the hashedPassword against the DB
 
-        // Store token
+        // Generate token
+        const token = jwt.sign(
+            { username: username, dateCreated: Date.now()},
+            process.env.JWT_SECRET
+        );
         // Return token
-        return true;
+        return token;
     };
 
     // TODO: Log the user in and out by toggling a boolean field
@@ -351,8 +355,9 @@ const login = async (req, res) => {
             let hashedPassword = hashPassword(password);
             let dbUser = dbApi.getUserByPassword(hashedPassword);
             if(dbUser.username === username) {
-                dbApi.loginUser(username, hashedPassword);
-                res.sendStatus(200);
+                let jwToken = dbApi.loginUser(username, hashedPassword);
+                // persist the token as 'Q' in cookie with expiry date
+                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).status(200);
             } else res.send("The username and password combination provided was invalid.");
         } else res.send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
     } else res.send("Please fill out all available fields.");
