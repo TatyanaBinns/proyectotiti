@@ -106,6 +106,10 @@ async function dbInit(){
     // TODO: Check if the user is logged in and
     dbApi.getUserLoggedInValue = (username) => { return true };
 
+    //Given a usernams and passwords, returns true or false, depending on whether they are a valid combination.
+    dbApi.verifyCredentials = async (uname, pw) => 
+        (await (exec("SELECT uid FROM users where username=$1 AND password_hash=$2;", [uname,pw]))).length > 0;
+  
     // TODO: Get the user from the DB using the hashedPassword
     dbApi.getUserByPassword = (hashedPassword) => {
         //Example dbUser Object
