@@ -75,7 +75,11 @@ async function dbInit(){
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
 
-    dbApi.userNameExists = username => exec("SELECT uid FROM users where username=$1;",[username]).length > 0;
+    dbApi.userNameExists = username => {
+        var res = exec("SELECT uid FROM users where username=$1;",[username]);
+        console.log("Result Length: "+res.length);
+        return res.length > 0;
+    };
 
     dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
         exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
