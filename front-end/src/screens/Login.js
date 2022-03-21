@@ -26,7 +26,7 @@ function Login() {
         username, password
       })
           .then(function (response) {
-            if(response.data.status == "success")
+            if(response.status == 200)
             {
               localStorage.setItem('username', username);
               navigate("/home");
