@@ -12,12 +12,17 @@ function Signup() {
   const [lname, setLname] = useState("");
   const [username, setUsername] = useState("");
 
+  let navigate = useNavigate();
+
   const submitForm = () => {
       axios.post('https://proyectotiti.herokuapp.com/register', {
         username, password, fname, lname
       })
           .then(function (response) {
-            console.log(response);
+            if(response.status == 200)
+            {
+              navigate("/login");
+            }
           })
   };
   
