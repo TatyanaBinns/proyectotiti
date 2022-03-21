@@ -309,20 +309,38 @@ const getUsers = async (req, res) => {
 
 };
 
-const updateUserPermissions = async (req, res) => {
-    let { user_uid, new_permission } = req.body;
+const grantUserPermission = async (req, res) => {
+    let user_uid = req.params;
+    let new_permission = req.body;
     if(!user_uid || !new_permission) {
         res.status(400).send(JSON.stringify("Please fill out all available fields."));
     } else {
         let admin_uid = req.params.uid;
-        if(dbApi.isAdmin(admin_uid)){
-            dbApi.updateUserPermissions(user_uid, new_permission);
+        if(await dbApi.isAdmin(admin_uid)){
+            await dbApi.grantUserPermission(user_uid, new_permission);
             res.status(200).send(JSON.stringify(`Successfully updated the permissions of the user with uid: ${user_uid}.`));
         } else {
             res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
         }
     }
+};
 
+const revokeUserPermission =  async (req, res) => {
+    let user_uid = req.params;
+    let permission = req.body;
+    if(!user_uid || !permission) {
+        res.status(400).send(JSON.stringify("Please fill out all available fields."));
+    } else {
+        let admin_uid = req.params.uid;
+        if(await dbApi.isAdmin(admin_uid)){
+            await dbApi.revokeUserPermission(user_uid, permission);
+            res.status(200).send(JSON.stringify(
+                `Successfully revoked the permission: ${permission} of the user with uid: ${user_uid}.`)
+            );
+        } else {
+            res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
+        }
+    }
 };
 
 const deleteUser = async (req, res) => {
@@ -331,9 +349,13 @@ const deleteUser = async (req, res) => {
         res.status(400).send(JSON.stringify("Please fill out all available fields."));
     } else {
         let admin_uid = req.params.uid;
-        if(dbApi.isAdmin(admin_uid)){
-            dbApi.deleteUser(user_uid);
-            res.status(200).send(JSON.stringify(`Successfully deleted the user with uid: ${user_uid}.`));
+        if(await dbApi.isAdmin(admin_uid)){
+            let deleted = await dbApi.deleteUser(user_uid);
+            if(deleted){
+                res.status(200).send(JSON.stringify(`Successfully deleted the user with uid: ${user_uid}`));
+            } else {
+                res.status.send(`Unable to delete the user with uid: ${user_uid}`);
+            }
         } else {
             res.status(400).send(JSON.stringify("You do not have permission to perform this action"));
         }
@@ -445,7 +467,7 @@ const updatePassword = async (req, res) => {
 
 //====== Tracker Controller Functions ======
 const registerTracker = async (req, res) => {
-    let { uuid, animalId} = req.body;
+    let { uuid, animalId } = req.body;
     if(!uuid || !animalId) {
         res.status(400).send("Please fill out all available fields.");
     }
@@ -544,22 +566,21 @@ const getPings = async (req, res) => {
 
 //======= Admin Routes =======
 app.get('/get-users/:uid', getUsers);
-app.put('/update-user-permissions/:uid', updateUserPermissions);
+app.put('/grant-user-permissions/:uid', grantUserPermission);
+app.put('/revoke-user-permissions/:uid', revokeUserPermission);
 app.delete('/delete-user/:uid', deleteUser);
 
 //====== User Routes ======
 app.post('/register', register);
-app.get('/register', register);
 app.post('/login', login);
 app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
 app.put('/update-password/:tempPassword', updatePassword);
 
 //======= Tracker Routes ======
-// TODO: Create endpoint to link the uuid to animal ID with datetime
+// TODO: Create endpoint to link the tracker uuid to animalID with datetime
 // TODO: Create endpoint to get history of the tracker
-// TODO: Create endpoint to update the tracker
-app.post('/trackers', registerTracker);
+app.post('/trackers/:uuid', registerTracker);
 app.get('/trackers/:animalId?/:uuid?', getTrackers);
 app.put('/trackers', updateTracker);
 app.delete('/trackers/:trackerId', deleteTracker);
@@ -572,6 +593,7 @@ app.put('/base-stations', updateBaseStation);
 app.delete('/base-stations/:stationId', deleteBaseStation);
 
 //======= Ping Routes ======
+// TODO: Add export endpoints (CSV)
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
  
 app.get('*', (req, res) => {    
@@ -585,6 +607,7 @@ function generateTempPassword() {
     return "temporaryPassword";
 }
 
+// FIXME: Use a real hash algorithm
 function hashPassword(password) {
     console.log(`Hash the password: ${password}`)
     return password;
