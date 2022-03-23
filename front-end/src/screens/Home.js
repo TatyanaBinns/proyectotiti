@@ -11,7 +11,7 @@ function Home() {
       <Header/>
         <Box color="black" bgcolor="white" p={8} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
         <Typography variant="h5">
-            Welcome {localStorage.getItem('username')}
+            Welcome to the site {localStorage.getItem('username')}
           </Typography>
         </Box>
     </div>
