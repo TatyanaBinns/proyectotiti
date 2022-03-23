@@ -585,7 +585,7 @@ const exportCsv = async (req, res) => {
             console.log("Write to proyecto_titi_fastcsv.csv successfully!");
         })
         .pipe(ws);
-    res.status(200).send(JSON.stringify(ws.path.entries()));
+    res.status(200).send(JSON.stringify(ws.bytesWritten));
 }
 
 //======= Admin Routes =======
@@ -619,7 +619,7 @@ app.delete('/base-stations/:stationId', deleteBaseStation);
 //======= Ping Routes ======
 // TODO: Add export endpoints (CSV)
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
-app.get('/pings/:trackerId?/:startTime?-:endTime?/export', exportCsv);
+app.get('/pings/export/:trackerId?/:startTime?-:endTime?', exportCsv);
  
 app.get('*', (req, res) => {    
     res.sendfile(path.join(__dirname, 'front-end/build','index.html'));  
