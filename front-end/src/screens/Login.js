@@ -34,6 +34,7 @@ function Login() {
             {
               localStorage.setItem('username', username);
               localStorage.setItem('pings', pings);
+              console.log("I changed woooo");
               navigate("/home");
             }
           })
