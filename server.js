@@ -3,6 +3,8 @@ const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -13,9 +15,13 @@ let uri = process.env.DATABASE_URL;
 if (uri == null || uri == "")
   uri = "postgres://postgres:password@localhost:5432/postgres"; //TODO set an agreed upon local development
 
-let JWT_PASSPHRASE = process.env.JWT_SECRET
+let JWT_PASSPHRASE = process.env.JWT_SECRET;
 if(JWT_PASSPHRASE == null || JWT_PASSPHRASE == "")
     JWT_PASSPHRASE = 'aRaNd0mPa$$phra$3';
+
+let H_SECRET = process.env.H_SECRET;
+if(H_SECRET == null || H_SECRET == "")
+    H_SECRET = 'iTsAsEcReTkEy';
 
 //===== Setup the database connection and access functions
 dbApi = { };
