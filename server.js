@@ -619,7 +619,7 @@ app.delete('/base-stations/:stationId', deleteBaseStation);
 //======= Ping Routes ======
 // TODO: Add export endpoints (CSV)
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
-app.get('/pings/:trackerId?/:startTime?-:endTime?', exportCsv);
+app.get('/pings/:trackerId?/:startTime?-:endTime?/export', exportCsv);
  
 app.get('*', (req, res) => {    
     res.sendfile(path.join(__dirname, 'front-end/build','index.html'));  
