@@ -18,26 +18,30 @@ function Login() {
         {
           console.log("Required")
         }
-        else
-      {
-        axios.post('https://proyectotiti.herokuapp.com/login', {
-        username, password
-      })
-          .then(function (response) {
-            if(response.status == 200)
+      else
+        { 
+          Promise.all
+            ([
+              axios.post('https://proyectotiti.herokuapp.com/login', {username, password}),
+              axios.get('https://proyectotiti.herokuapp.com/listpings')
+            ])
+          .then(response => {
+            const login_success_code = response[0].status
+            const pings = response[1].data
+
+            
+            if(login_success_code == 200)
             {
               localStorage.setItem('username', username);
-              axios.get('https://proyectotiti.herokuapp.com/listpings')
-                .then(function (response){
-                  console.log(response);
-                })
+              localStorage.setItem('pings', pings);
+              navigate("/home");
             }
-            else
-              {
-                console.log(response);
-              }
-          })       
-      }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
+        }
     };
     
     return (
