@@ -3,9 +3,11 @@ const bodyParser =require('body-parser')
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
+const fastcsv = require("fast-csv");
+const fs = require('fs');
+const ws = fs.createWriteStream("proyecto_titi_fastcsv.csv");
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -232,23 +234,23 @@ async function dbInit(){
 
     dbApi.getPings = (trackerId, startTime, endTime) => {
         console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
-        // A sample object containing multiple pings
-        let pings = {
-            ping1: {
+        // A sample JSON array object containing multiple pings
+        let pings = [
+            {
                 timestamp: Date.UTC(2022, 3, 10, 12, 35, 30, 999),
                 trackerid: 98765,
                 stationid: 8675309,
                 location: "somewhere",
                 velocity: "fast"
             },
-            ping2: {
+            {
                 timestamp: Date.now(),
                 trackerid: 98765,
                 stationid: 8675309,
                 location: "anywhere",
                 velocity: "slow"
             }
-        }
+        ]
         return pings;
     };
 
@@ -566,9 +568,25 @@ const getPings = async (req, res) => {
     let trackerId = req.params.trackerId;
     let startTime = req.params.startTime;
     let endTime = req.params.endTime;
+    console.log(`TrackerID: ${trackerId}, StartTime: ${startTime}, EndTime: ${endTime}`);
     let pings = dbApi.getPings(trackerId, startTime, endTime);
     res.status(200).send(JSON.stringify(pings));
 };
+
+const exportCsv = async (req, res) => {
+    let trackerId = req.params.trackerId;
+    let startTime = req.params.startTime;
+    let endTime = req.params.endTime;
+    console.log(`TrackerID: ${trackerId}, StartTime: ${startTime}, EndTime: ${endTime}`);
+    let pings = dbApi.getPings(trackerId, startTime, endTime);
+    fastcsv
+        .write(pings, { headers: true })
+        .on("finish", function() {
+            console.log("Write to proyecto_titi_fastcsv.csv successfully!");
+        })
+        .pipe(ws);
+    res.status(200).send(ws);
+}
 
 //======= Admin Routes =======
 app.get('/get-users/:uid', getUsers);
@@ -601,6 +619,7 @@ app.delete('/base-stations/:stationId', deleteBaseStation);
 //======= Ping Routes ======
 // TODO: Add export endpoints (CSV)
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
+app.get('/pings/:trackerId?/:startTime?-:endTime?', exportCsv);
  
 app.get('*', (req, res) => {    
     res.sendfile(path.join(__dirname, 'front-end/build','index.html'));  
