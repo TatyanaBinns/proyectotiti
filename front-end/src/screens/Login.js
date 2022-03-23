@@ -20,20 +20,27 @@ function Login() {
         }
       else
         { 
-          axios.post('https://proyectotiti.herokuapp.com/login', {
-            username, password
-          })
-              .then(function (response) {
-                if(response.status == 200)
-                {
-                  localStorage.setItem('username', username);
-                  navigate("/home");
-                }
-                else
-                  {
-                    console.log(response);
-                  }
-              }) 
+          Promise.all
+          ([
+            axios.post('https://proyectotiti.herokuapp.com/login', {username, password}),
+            axios.get('https://proyectotiti.herokuapp.com/listpings')
+          ])
+        .then(response => {
+          const login_success_code = response[0].status
+          const pings = response[1].data
+
+          
+          if(login_success_code == 200)
+          {
+            localStorage.setItem('username', username);
+            localStorage.setItem('pings', pings);
+            console.log("I changed woooo");
+            navigate("/home");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        }); 
 
         }
     };
