@@ -266,7 +266,6 @@ app.use(bodyParser.text({
     type: "*/*"
 }));
 
-
 //============ Initialize endpoints ============
 app.get('/', async (req, res) => {
     res.send(JSON.stringify(await dbApi.now(), null, 4))
