@@ -8,15 +8,15 @@ function Signup() {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
+  const [first_name, setFname] = useState("");
+  const [last_name, setLname] = useState("");
   const [username, setUsername] = useState("");
 
   let navigate = useNavigate();
 
   const submitForm = () => {
       axios.post('https://proyectotiti.herokuapp.com/register', {
-        username, password, fname, lname
+        username, password, first_name, last_name
       })
           .then(function (response) {
             if(response.status == 200)
@@ -41,7 +41,7 @@ function Signup() {
             required
             className="form-input"
             margin="normal"
-            value={fname}
+            value={first_name}
             onChange={e => setFname(e.target.value)}
           />
          <TextField
@@ -50,7 +50,7 @@ function Signup() {
             required
             margin = "normal"
             className="form-input"
-            value={lname}
+            value={last_name}
             onChange={e => setLname(e.target.value)}
           />
           <TextField
