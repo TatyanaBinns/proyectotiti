@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const saltRounds = 8;
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -614,8 +615,16 @@ function generateTempPassword() {
 
 // FIXME: Use a real hash algorithm
 function hashPassword(password) {
+    let hashedPassword = "";
+    bcrypt.genSalt(saltRounds)
+        .then(salt => {
+            bcrypt.hash(password, salt)
+                .then(hash => {
+                     hashedPassword = hash;
+                });
+        });
     console.log(`Hash the password: ${password}`)
-    return password;
+    return hashedPassword;
 }
 
 function cookieCheck(jwToken) {
