@@ -585,7 +585,7 @@ const exportCsv = async (req, res) => {
             console.log("Write to proyecto_titi_fastcsv.csv successfully!");
         })
         .pipe(ws);
-    res.status(200).send(ws);
+    res.status(200).send(JSON.stringify(ws.path.entries()));
 }
 
 //======= Admin Routes =======
