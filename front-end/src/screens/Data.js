@@ -10,6 +10,13 @@ function Data() {
  
   const position = [10.633, -75.241];
   
+  axios.get('https://proyectotiti.herokuapp.com/listpings')
+          .then(function (response) {
+            if(response.status == 200)
+            {
+              console.log(response);
+            }
+          })
 
   return (
     <div className="Data-header">
