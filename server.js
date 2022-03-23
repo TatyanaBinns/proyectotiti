@@ -617,14 +617,13 @@ app.put('/base-stations', updateBaseStation);
 app.delete('/base-stations/:stationId', deleteBaseStation);
 
 //======= Ping Routes ======
-// TODO: Add export endpoints (CSV)
+// TODO: Add download CSV endpoint
 app.get('/pings/:trackerId?/:startTime?-:endTime?', getPings);
 app.get('/pings/export/:trackerId?/:startTime?-:endTime?', exportCsv);
  
-app.get('*', (req, res) => {    
-    res.sendfile(path.join(__dirname, 'front-end/build','index.html'));  
+app.get('*', (req, res) => {
+    res.sendfile(path.join(__dirname, 'front-end/build','index.html'));
   })
-
 
 //====== Helper Functions ======
 function generateTempPassword() {
@@ -632,18 +631,8 @@ function generateTempPassword() {
     return "temporaryPassword";
 }
 
-// FIXME: Use a real hash algorithm
-function hashPassword(password) {
-    let hashedPassword = "";
-    bcrypt.genSalt(saltRounds)
-        .then(salt => {
-            bcrypt.hash(password, salt)
-                .then(hash => {
-                     hashedPassword = hash;
-                });
-        });
-    console.log(`Hashed the password: ${password}`)
-    console.log(`Password hashed to: ${hashedPassword}`);
+async function hashPassword(password) {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     return hashedPassword;
 }
 
