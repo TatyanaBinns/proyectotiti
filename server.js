@@ -584,8 +584,9 @@ const exportCsv = async (req, res) => {
         .on("finish", function() {
             console.log("Write to proyecto_titi_fastcsv.csv successfully!");
         })
-        .pipe(ws);
-    res.status(200).send(JSON.stringify(ws.bytesWritten));
+        .pipe(ws)
+    let data = fs.readFileSync('proyecto_titi_fastcsv.csv');
+    res.status(200).send(JSON.stringify(data));
 }
 
 //======= Admin Routes =======
@@ -623,7 +624,7 @@ app.get('/pings/export/:trackerId?/:startTime?-:endTime?', exportCsv);
  
 app.get('*', (req, res) => {
     res.sendfile(path.join(__dirname, 'front-end/build','index.html'));
-  })
+  });
 
 //====== Helper Functions ======
 function generateTempPassword() {
