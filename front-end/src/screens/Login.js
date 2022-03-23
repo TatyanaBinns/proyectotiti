@@ -12,8 +12,6 @@ function Login() {
     const [password, setPassword] = useState("");
 
     const axios = require('axios');
-
-    const baseurl = "https://proyectotiti.herokuapp.com/";
   
     const submitForm = () => {
       if (username == '' || password == '')
@@ -30,13 +28,9 @@ function Login() {
             {
               localStorage.setItem('username', username);
               axios.get('https://proyectotiti.herokuapp.com/listpings')
-                .then(function (response) {
-                  if(response.status == 200)
-                    {
-                      console.log(response);
-                    }
-          })
-              navigate("/home");
+                .then(function (response){
+                  console.log(response);
+                })
             }
             else
               {
