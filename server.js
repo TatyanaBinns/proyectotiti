@@ -623,7 +623,8 @@ function hashPassword(password) {
                      hashedPassword = hash;
                 });
         });
-    console.log(`Hash the password: ${password}`)
+    console.log(`Hashed the password: ${password}`)
+    console.log(`Password hashed to: ${hashedPassword}`);
     return hashedPassword;
 }
 
