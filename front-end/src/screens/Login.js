@@ -26,8 +26,8 @@ function Login() {
             axios.get('https://proyectotiti.herokuapp.com/listpings')
           ])
         .then(response => {
-          const login_success_code = response[0].status
-          const pings = response[1].data
+          const login_success_code = response[0].status;
+          const pings = JSON.parse(response[1].data);
 
           
           if(login_success_code == 200)
