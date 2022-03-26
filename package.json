@@ -22,13 +22,11 @@
   },
   "homepage": "https://github.com/TatyanaBinns/proyectotiti#readme",
   "dependencies": {
-    "@mui/x-data-grid": "^5.7.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "express": "^4.17.2",
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
-    "material-table": "^2.0.3",
     "nodemailer": "^6.7.2",
     "pg": "^8.7.1"
   }
