@@ -11,8 +11,8 @@ function Admin() {
   return (
     <div className="Settings-header">
       <Header/>
-      <Box p={25} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-      <MaterialTable
+      <div style={{ maxWidth: '100%' }}>
+        <MaterialTable
           columns={[
             { title: 'Adı', field: 'name' },
             { title: 'Soyadı', field: 'surname' },
@@ -22,7 +22,7 @@ function Admin() {
           data={[{ name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 }]}
           title="Demo Title"
         />
-      </Box>
+      </div>
     </div>
   );
 }
