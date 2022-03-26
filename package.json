@@ -27,6 +27,7 @@
     "express": "^4.17.2",
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
+    "material-table": "^2.0.3",
     "nodemailer": "^6.7.2",
     "pg": "^8.7.1"
   }
