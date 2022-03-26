@@ -9,6 +9,7 @@ import Landing from './screens/Landing';
 import Login from './screens/Login';
 import Settings from './screens/Settings';
 import Signup from './screens/Signup';
+import Admin from './screens/Admin';
 
 
 ReactDOM.render(
@@ -21,6 +22,7 @@ ReactDOM.render(
       <Route path="/data" element={<Data/>}/>
       <Route path="/settings" element={<Settings/>}/>
       <Route path="/forgotpassword" element={<Forgotpassword/>}/>
+      <Route path="/admin" element={<Admin/>}/>
     </Routes>
   </BrowserRouter>
  ,

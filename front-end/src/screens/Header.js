@@ -24,6 +24,10 @@ import {
       href: "/data",
     },
     {
+      label: "Admin",
+      href: "/admin"
+    },
+    {
       label: "Settings",
       href: "/settings",
     },
