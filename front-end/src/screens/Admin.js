@@ -49,7 +49,6 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-
 function Admin() {
   return (
     <div className="Settings-header">
