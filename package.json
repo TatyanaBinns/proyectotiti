@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/TatyanaBinns/proyectotiti#readme",
   "dependencies": {
+    "@mui/x-data-grid": "^5.7.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "express": "^4.17.2",
