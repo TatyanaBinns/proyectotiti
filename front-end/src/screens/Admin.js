@@ -37,7 +37,7 @@ function Admin() {
   return (
     <div className="Settings-header">
       <Header/>
-      <div className="leaflet-container">
+      <div className="Table-container">
       <TableContainer component={Paper}>
       <Table aria-label="simple table" stickyHeader>
         <TableHead>
