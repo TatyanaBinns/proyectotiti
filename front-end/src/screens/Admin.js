@@ -11,7 +11,7 @@ function Admin() {
   return (
     <div className="Settings-header">
       <Header/>
-      <Box color="black" bgcolor="white" p={25} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+      <Box color="black" bgcolor="white" p={25} display="flex" justifyContent="center" alignItems="center" flexDirection="column" width = "50%" height= "80%" position= "absolute" left = "50px" top = "105px"> 
             <Table/>
         </Box>
     </div>
