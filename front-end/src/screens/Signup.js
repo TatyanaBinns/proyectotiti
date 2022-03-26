@@ -15,7 +15,15 @@ function Signup() {
   let navigate = useNavigate();
 
   const submitForm = () => {
-      axios.post('https://proyectotiti.herokuapp.com/register', {
+     
+    console.log(username);
+    console.log(password);
+    console.log(first_name);
+    console.log(last_name);
+
+    
+    /* 
+    axios.post('https://proyectotiti.herokuapp.com/register', {
         username, password, first_name, last_name
       })
           .then(function (response) {
@@ -24,6 +32,8 @@ function Signup() {
               navigate("/login");
             }
           })
+    */
+
   };
   
   return (    
