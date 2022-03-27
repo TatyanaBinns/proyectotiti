@@ -62,6 +62,7 @@ function Admin() {
           rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
+          autoHeight
         />  
       </div>
     </div>
