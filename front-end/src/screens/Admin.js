@@ -1,4 +1,4 @@
-import {Box} from "@material-ui/core";
+import {Box, Button} from "@material-ui/core";
 import "./styles.css";
 import Header from "./Header";
 import React, { useEffect, useState } from "react";
@@ -51,6 +51,12 @@ function Admin() {
     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   ];
 
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const submitForm = () => {
+    console.log(selectedRows);
+  };
+
   return (
     <div className="Settings-header">
       <Header/>
@@ -58,13 +64,22 @@ function Admin() {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
           autoHeight
           components={{ Toolbar: GridToolbar }}
-        />  
+          onSelectionModelChange={(ids) => {
+            const selectedIDs = new Set(ids);
+            const selectedRows = rows.filter((row) =>
+              selectedIDs.has(row.id),
+            );
+  
+            setSelectedRows(selectedRows);
+          }}
+        />
+        <Button onClick={submitForm}> </Button>  
       </div>
     </div>
   );
