@@ -157,7 +157,5 @@
   .Table-container{
     width: 90%;
     height: 80%;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+    background-color: white;
   }

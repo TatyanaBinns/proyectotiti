@@ -54,7 +54,7 @@ function Admin() {
   return (
     <div className="Settings-header">
       <Header/>
-      <Box color="black" bgcolor="white" p={25} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+      <div className="Table-container">
         <DataGrid
           rows={rows}
           columns={columns}
@@ -63,8 +63,7 @@ function Admin() {
           checkboxSelection
           disableSelectionOnClick
         />  
-      </Box>
-
+      </div>
     </div>
   );
 }
