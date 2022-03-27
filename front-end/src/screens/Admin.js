@@ -64,7 +64,7 @@ function Admin() {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={10}
+          pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
@@ -79,7 +79,7 @@ function Admin() {
             setSelectedRows(selectedRows);
           }}
         />
-        <Button onClick={submitForm}> </Button>  
+        <Button onClick={submitForm}>Delete</Button>  
       </div>
     </div>
   );
