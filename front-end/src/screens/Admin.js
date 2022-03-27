@@ -3,7 +3,7 @@ import "./styles.css";
 import Header from "./Header";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 
 function Admin() {
 
@@ -63,6 +63,7 @@ function Admin() {
           checkboxSelection
           disableSelectionOnClick
           autoHeight
+          components={{ Toolbar: GridToolbar }}
         />  
       </div>
     </div>
