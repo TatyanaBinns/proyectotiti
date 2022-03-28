@@ -37,6 +37,10 @@ function Signup() {
             {
               navigate("/registersucess");
             }
+            else
+            {
+              console.log(response);
+            }
           })
     }
 
