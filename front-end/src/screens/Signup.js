@@ -11,17 +11,23 @@ function Signup() {
   const [first_name, setFname] = useState("");
   const [last_name, setLname] = useState("");
   const [username, setUsername] = useState("");
+  const [signInError, setSignInError] = useState("")
 
   let navigate = useNavigate();
 
   const submitForm = () => {
 
-    
-    axios.post('https://proyectotiti.herokuapp.com/register', { username,
+    if(username == '' || password == '' || first_name == '' || last_name == '')
+    {
+      setSignInError("All fields required")
+    }
+    else
+    {
+      axios.post('https://proyectotiti.herokuapp.com/register', { username,
             password,
             first_name,
             last_name
-    })
+      })
           .then(function (response) {
             if(response.status == 200)
             {
@@ -29,6 +35,8 @@ function Signup() {
               navigate("/registersuccess");
             }
           })
+    }
+
 
   };
   
@@ -87,6 +95,10 @@ function Signup() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
+          {signInError.length > 0 &&
+            
+            <Typography>{signInError}</Typography>
+          }
           <Button
             variant="contained"
             color="primary"
