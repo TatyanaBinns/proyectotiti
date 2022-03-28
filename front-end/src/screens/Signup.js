@@ -19,20 +19,19 @@ function Signup() {
 
     if(username == '' || password == '' || first_name == '' || last_name == '')
     {
-      setSignInError("All fields required")
+      setSignInError("All fields required");
     }
     else
     {
-      axios.post('https://proyectotiti.herokuapp.com/register', { username,
-            password,
-            first_name,
-            last_name
+      setSignInError("");
+      
+      axios.post('https://proyectotiti.herokuapp.com/register', {
+        username, password, first_name, last_name
       })
           .then(function (response) {
             if(response.status == 200)
             {
-              console.log(response);
-              navigate("/registersuccess");
+              navigate("/registersucess");
             }
           })
     }
