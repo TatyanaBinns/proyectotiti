@@ -10,6 +10,7 @@ import Login from './screens/Login';
 import Settings from './screens/Settings';
 import Signup from './screens/Signup';
 import Admin from './screens/Admin';
+import RegisterSuccess from './screens/RegisterSuccess';
 
 
 ReactDOM.render(
@@ -23,6 +24,7 @@ ReactDOM.render(
       <Route path="/settings" element={<Settings/>}/>
       <Route path="/forgotpassword" element={<Forgotpassword/>}/>
       <Route path="/admin" element={<Admin/>}/>
+      <Route path="/registersuccess" element={<RegisterSuccess/>}/>
     </Routes>
   </BrowserRouter>
  ,

@@ -28,7 +28,7 @@ function Signup() {
           .then(function (response) {
             if(response.status == 200)
             {
-              navigate("/login");
+              navigate("/registersuccess");
             }
           })
 
