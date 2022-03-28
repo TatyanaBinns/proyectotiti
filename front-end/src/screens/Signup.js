@@ -2,7 +2,7 @@ import './styles.css';
 import {Box, Button, TextField,Typography} from '@material-ui/core';
 import React, { useState } from "react";
 import axios from "axios";
-import {Link,useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 function Signup() {
   
@@ -25,7 +25,7 @@ function Signup() {
     {
       setSignInError("");
 
-      axios.post('https://proyectotiti.herokuapp.com/register', {username: username, password: password, first_name: first_name, last_name: last_name})
+      axios.post('https://proyectotiti.herokuapp.com/register', null, {params: {username: username, password: password, first_name: first_name, last_name: last_name},})
           .then(function (response) {
             if(response.status == 200)
             {
