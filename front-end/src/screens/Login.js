@@ -5,7 +5,6 @@ import {Link,useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 function Login() {
-
     let navigate = useNavigate();
 
     const [username, setUsername] = useState("");
