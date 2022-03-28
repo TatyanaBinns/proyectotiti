@@ -29,8 +29,8 @@ function Signup() {
       console.log(first_name);
       console.log(last_name);
 
-      axios.post('https://proyectotiti.herokuapp.com/register', {
-        username, password, first_name, last_name
+      axios.post('https://proyectotiti.herokuapp.com/register',null, {params: {
+        username, password, first_name, last_name}
       })
           .then(function (response) {
             if(response.status == 200)
