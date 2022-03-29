@@ -379,7 +379,7 @@ const register = async (req, res) => {
     // Verify all fields were properly filled
     if (username && password && first_name && last_name) {
         //============== Check if the username is already taken =============== //
-        if(!(await dbApi.userNameExists(username))) {
+        if((await dbApi.userNameExists(username))) {
             let hashedPassword = hashPassword(password);
             let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
             if(userAdded){
