@@ -38,10 +38,6 @@ function Signup() {
             {
               navigate("/registersuccess");
             }
-            else
-            {
-              console.log(response);
-            }
           })
     }
 
