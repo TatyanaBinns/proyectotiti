@@ -32,11 +32,7 @@ function Signup() {
         last_name: last_name
       }
 
-      axios({
-        method:'post',
-        url: 'https://proyectotiti.herokuapp.com/register',
-        data: body        
-      })
+      axios.post('https://proyectotiti.herokuapp.com/register',body)
           .then(function (response) {
             if(response.status == 200)
             {
