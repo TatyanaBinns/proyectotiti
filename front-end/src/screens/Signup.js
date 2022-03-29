@@ -24,8 +24,19 @@ function Signup() {
     else
     {
       setSignInError("");
+      
+      var body = {
+        username: username,
+        password: password,
+        first_name: first_name,
+        last_name: last_name
+      }
 
-      axios.post('https://proyectotiti.herokuapp.com/register',{username: username, password: password, first_name: first_name, last_name: last_name})
+      axios({
+        method:'post',
+        url: 'https://proyectotiti.herokuapp.com/register',
+        data: body        
+      })
           .then(function (response) {
             if(response.status == 200)
             {
