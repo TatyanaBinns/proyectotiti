@@ -374,7 +374,10 @@ const deleteUser = async (req, res) => {
 
 //====== User Controller Functions ======
 const register = async (req, res) => {
-    const { username, password, first_name, last_name } = req.body;
+    var username = req.body.username;
+    var password = req.body.password;
+    var first_name = req.body.first_name;
+    var last_name = req.body.last_name;
 
     // Verify all fields were properly filled
     if (!(username && password && first_name && last_name)) {
