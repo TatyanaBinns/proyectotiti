@@ -374,13 +374,10 @@ const deleteUser = async (req, res) => {
 
 //====== User Controller Functions ======
 const register = async (req, res) => {
-    var username = req.body.username;
-    var password = req.body.password;
-    var first_name = req.body.first_name;
-    var last_name = req.body.last_name;
+    const { username, password, first_name, last_name } = req.body;
 
     // Verify all fields were properly filled
-    if (!(username && password && first_name && last_name)) {
+    if (username && password && first_name && last_name) {
         //============== Check if the username is already taken =============== //
         if(!(await dbApi.userNameExists(username))) {
             let hashedPassword = hashPassword(password);
