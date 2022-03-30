@@ -71,7 +71,14 @@ async function dbInit(){
     //Debug function, gets the current time from the database server.
     dbApi.now = () => exec('SELECT NOW() as now');
     
-    dbApi.storeping = (trackerid, stationid, lat, lon, velocity) => exec('INSERT INTO public.pings ("timestamp", trackeruuid, stationuuid, "location", velocity) VALUES(now(), $1, $2, point($3, $4), $5);', [trackerid, stationid, lat, lon, velocity]);
+    dbApi.storeping = (trackerid, stationid, lat, lon, time) => {
+        // TODO: Just return true on success
+        // exec('INSERT INTO public.pings ("timestamp", trackeruuid, stationuuid, "location") VALUES(now(), $1, $2, point($3, $4), $5);', [trackerid, stationid, lat, lon]);
+
+        // FIXME: Del-EAT MEEEEE! (Seriously, delete this)
+        console.log(`Storing ${lat}N and ${lon}W coordinates from Tracker#${trackerid} via BaseStation#${stationid} at ${time} o'clock.`);
+        return true;
+    }
     
     dbApi.log = (entry) => exec('INSERT INTO public.logs(entry, "timestamp", uid)VALUES($1, now(), 1);', [entry]);
 
@@ -283,18 +290,48 @@ app.get('/', async (req, res) => {
 });
 
 var storePing = async (req, res) => {
-    //req.body.    (TODO: need format from ece team.) 
-    var logEntry = {
-        body: req.body,
-        query: req.query
-    };
-    await dbApi.log(JSON.stringify(logEntry, null, 4));
-    var trackerid= 4242, stationid = 42, lat= 28.365349, lon=81.125664, velocity=0.39;
-    await dbApi.ensureStation(stationid);
-    await dbApi.ensureTracker(trackerid);
-    res.send(JSON.stringify(await dbApi.storeping(trackerid, stationid, lat, lon, velocity), null, 4))
+    let logEntry = req.query.data;
+
+    const seperators = ["N", "W", "T", "A", "B"];
+    let lat = "", lon = "", time = "", trackerId = "", baseStationId = "", tempString = "";
+
+    for(let i = 0; i < logEntry.length; i++) {
+        if(!seperators.includes(logEntry[i])) {
+            tempString = tempString + logEntry[i];
+        } else {
+            switch (logEntry[i]) {
+                // String ended in "N"
+                case seperators[0]:
+                    lat = tempString;
+                    tempString = "";
+                    break;
+
+                // String ended in "W"
+                case seperators[1]:
+                    lon = tempString;
+                    tempString = "";
+                    break;
+                // String ender in "T"
+                case seperators[2]:
+                    time = tempString.split(",").join("");
+                    tempString = "";
+                    break;
+                // String ended in "A"
+                case seperators[3]:
+                    trackerId = tempString;
+                    tempString = "";
+                    break;
+                // String ended in "B"
+                case seperators[4]:
+                    baseStationId = tempString;
+                    if(!dbApi.storeping(trackerId, baseStationId, lat, lon, time)) {
+                        res.status(400).send("Oops...something went wrong unexpectedly!")
+                    }
+            }
+        }
+    }
+    res.status(200).send("Everything went well...I hope.");
 };
-app.get('/storeping', storePing);
 app.post('/storeping', storePing);
 
 app.get('/listpings', async (req, res) => {
