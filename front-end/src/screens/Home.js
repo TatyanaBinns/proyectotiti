@@ -12,17 +12,19 @@ function Home() {
 
   const columns = [
     { field: 'id', headerName: 'Tracker ID', width: 200 },
+    { field: 'trackerName', headerName: 'Tracker Name', width: 200}
   ];
   
   const rows = [
-    { id: 1},
-    { id: 2},
-    { id: 3},
+    { id: 1, trackerName: "UCF Buildings"},
+    { id: 2, trackerName: "Resturants"},
+    { id: 3, trackerName: "Random Points"},
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [error, setError] = useState("");
   var selectedRowIds = [];
+  var selectedRowNames = [];
 
 
   const submitForm = () => {
@@ -35,7 +37,12 @@ function Home() {
       selectedRows.map(tracker => (
         selectedRowIds.push(tracker.id)
       ));
+      selectedRows.map(tracker => (
+        selectedRowNames.push(tracker.trackerName)
+      ));
       localStorage.setItem("trackerIDs", selectedRowIds);
+      localStorage.setItem("trackerNames", selectedRowNames);
+
       navigate("/data");
     }
     
@@ -67,7 +74,7 @@ function Home() {
         />
         {error.length > 0 &&
             
-            <Typography>{error}</Typography>
+            <Typography align='center'>{error}</Typography>
           }
         <Button
             variant="contained"
