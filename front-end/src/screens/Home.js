@@ -23,7 +23,7 @@ function Home() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const submitForm = () => {
-    if(JSON.stringify(selectedRows) == '{}')
+    if(JSON.stringify(selectedRows) == '[]')
     {
       console.log("No rows Selected");
     }
