@@ -1,7 +1,7 @@
 import {Box, Button} from "@material-ui/core";
 import "./styles.css";
 import Header from "./Header";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import axios from "axios";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 
