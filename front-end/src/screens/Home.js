@@ -23,13 +23,13 @@ function Home() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const submitForm = () => {
-    if(selectedRows == [])
+    if(JSON.stringify(selectedRows) == '{}')
     {
       console.log("No rows Selected");
     }
     else
     {
-      localStorage.setItem("trackerId", selectedRows);
+      localStorage.setItem("trackerId", selectedRows.id);
       navigate("/data");
     }
     
