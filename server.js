@@ -99,10 +99,7 @@ async function dbInit(){
     dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
         exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
 
-    // TODO: Log the user in and out by toggling a boolean field 
     dbApi.loginUser = (username, hashedPassword) => {
-        // TODO: Check the hashedPassword against the DB
-
         // Generate token
         const token = jwt.sign(
             { username: username, dateCreated: Date.now()},
@@ -663,7 +660,7 @@ app.post('/forgot-password', forgotPassword);
 app.put('/update-password/:tempPassword', updatePassword);
 
 //======= Tracker Routes ======
-// TODO: Create endpoint to link the tracker uuid to animalID with datetime (Dr. Savage will do this)
+// TODO: Create endpoint to link the tracker uuid to animalID with datetime (Admin restricted)
 app.post('/trackers/:uuid', registerTracker);
 app.get('/trackers/:animalId?/:uuid?', getTrackers);
 app.put('/trackers', updateTracker);
