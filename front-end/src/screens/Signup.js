@@ -11,7 +11,7 @@ function Signup() {
   const [first_name, setFname] = useState("");
   const [last_name, setLname] = useState("");
   const [username, setUsername] = useState("");
-  const [signInError, setSignInError] = useState("")
+  const [signInError, setSignInError] = useState("");
 
   let navigate = useNavigate();
 
