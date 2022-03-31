@@ -72,12 +72,8 @@ async function dbInit(){
     dbApi.now = () => exec('SELECT NOW() as now');
     
     dbApi.storeping = (trackerid, stationid, lat, lon, time) => {
-        // TODO: Just return true on success
-        // exec('INSERT INTO public.pings ("timestamp", trackeruuid, stationuuid, "location") VALUES(now(), $1, $2, point($3, $4), $5);', [trackerid, stationid, lat, lon]);
-
-        // FIXME: Del-EAT MEEEEE! (Seriously, delete this)
-        console.log(`Storing ${lat}N and ${lon}W coordinates from Tracker#${trackerid} via BaseStation#${stationid} at ${time} o'clock.`);
-        return true;
+        exec('INSERT INTO public.pings ("timestamp", trackeruuid, stationuuid, "location") VALUES($1, $2, $3, point($4, $5));', [time, trackerid, stationid, lat, lon]);
+        return 1;
     }
     
     dbApi.log = (entry) => exec('INSERT INTO public.logs(entry, "timestamp", uid)VALUES($1, now(), 1);', [entry]);
@@ -109,35 +105,9 @@ async function dbInit(){
         return token;
     };
 
-    // TODO: Log the user in and out by toggling a boolean field
-    dbApi.logoutUser = (uid) => {
-        // TODO: Fetch the user by uid and toggle the user's logged_in property to false
-        return true;
-    };
-
-    // TODO: Check if the user is logged in and
-    dbApi.getUserLoggedInValue = (username) => { return true };
-
     //Given a usernams and passwords, returns true or false, depending on whether they are a valid combination.
     dbApi.verifyCredentials = async (uname, pw) => 
         (await (exec("SELECT uid FROM users where username=$1 AND password_hash=$2;", [uname,pw]))).length > 0;
-  
-    // TODO: Get the user from the DB using the hashedPassword
-    dbApi.getUserByPassword = (hashedPassword) => {
-        //Example dbUser Object
-        var dbUser = {
-            uid: 12345,
-            username: "username",
-            email: "example@example.com",
-            password_hash: "password",
-            first_name: "First",
-            last_name: "Last",
-            logged_in: true,
-            permission: "admin",
-            token: ''
-        };
-        return dbUser;
-    };
 
     dbApi.getUsers = () => exec('SELECT uid, username, first_name, last_name FROM users;');
 
