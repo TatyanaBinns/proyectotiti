@@ -3,10 +3,13 @@ import "./styles.css";
 import Header from "./Header";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import React, {useState } from "react";
+import {useNavigate} from 'react-router-dom';
 
 
 
 function Home() {
+  let navigate = useNavigate();
+
   const columns = [
     { field: 'id', headerName: 'Tracker ID', width: 200 },
   ];
@@ -20,7 +23,17 @@ function Home() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const submitForm = () => {
-    console.log(selectedRows);
+    if(selectedRows[0] == "")
+    {
+      console.log("No rows Selected");
+    }
+    else
+    {
+      localStorage.setItem("trackerId", selectedRows);
+      navigate("/data");
+    }
+    
+    
   };
 
   return (
