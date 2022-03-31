@@ -21,16 +21,21 @@ function Home() {
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
+  var selectedRowIds = [];
+
 
   const submitForm = () => {
     if(JSON.stringify(selectedRows) == '[]')
     {
-      setError("No Row Selected");
+      setError("Please Select a Row");
     }
     else
     {
-      console.log(JSON.stringify(selectedRows));
+      selectedRows.map(tracker => (
+        selectedRowIds.push(tracker.id)
+      ));
+      localStorage.setItem("trackerIDs", selectedRowIds);
       navigate("/data");
     }
     
