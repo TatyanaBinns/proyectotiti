@@ -35,6 +35,7 @@ function Home() {
           checkboxSelection
           disableSelectionOnClick
           autoHeight
+          disableMultipleSelection={true}
           components={{ Toolbar: GridToolbar }}
           onSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);

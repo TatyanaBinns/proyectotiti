@@ -69,6 +69,7 @@ function Admin() {
           checkboxSelection
           disableSelectionOnClick
           autoHeight
+          disableMultipleSelection={true}
           components={{ Toolbar: GridToolbar }}
           onSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);
@@ -79,7 +80,20 @@ function Admin() {
             setSelectedRows(selectedRows);
           }}
         />
-        <Button onClick={submitForm}>Delete</Button>  
+        <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{
+              backgroundColor: "#299846",
+            }}
+            margin = "normal"
+            className="form-input"
+            size="large"
+            onClick={submitForm}
+          >
+            View Selected Tracker Data
+          </Button>  
       </div>
     </div>
   );
