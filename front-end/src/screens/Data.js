@@ -58,9 +58,6 @@ function Data() {
     { field: 'location', headerName: 'Location', width: 200}
   ];
   
-  
-  const [activePark, setActivePark] = useState(null);
-  
 
   return (
     <div className="Data-header">
@@ -71,34 +68,10 @@ function Data() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {rows.map(point => (
-            <Marker
-              key={point.id}
-              position={[
-                point.location[0],
-                point.location[1]
-              ]}
-              onClick={() => {
-                setActivePark(point);
-              }}
-            />
+            <Marker position={[point.location[0],point.location[1]]}>
+              <Popup>{point.name}</Popup>
+            </Marker>
             ))}
-
-            {activePark && (
-            <Popup
-              position={[
-                activePark.location[1],
-                activePark.location[0]
-              ]}
-              onClose={() => {
-                setActivePark(null);
-              }}
-            >
-          <div>
-            <h2>{activePark.name}</h2>
-          </div>
-          </Popup>
-  )}
-          
           </MapContainer>
         
 
