@@ -11,7 +11,7 @@ import React, {useState } from "react";
 
 function Data() {
  
-  const position = [10.633, -75.241];
+  const position = [28.60173887418597, -81.2004132871915];
   let rows = [];
   var selectedRowIds = localStorage.getItem("trackerIDs");
 
@@ -70,6 +70,34 @@ function Data() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {rows.map(point => (
+            <Marker
+              key={point.id}
+              position={[
+                point.location[1],
+                point.location[0]
+              ]}
+              onClick={() => {
+                setActivePark(point);
+              }}
+            />
+            ))}
+
+            {activePark && (
+            <Popup
+              position={[
+                activePark.location[1],
+                activePark.location[0]
+              ]}
+              onClose={() => {
+                setActivePark(null);
+              }}
+            >
+          <div>
+            <h2>{activePark.name}</h2>
+          </div>
+          </Popup>
+  )}
           
           </MapContainer>
         
