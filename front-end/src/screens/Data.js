@@ -35,26 +35,8 @@ function Data() {
         
 
           <div className="Table-container-data">
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-              disableSelectionOnClick
-              autoHeight
-              disableMultipleSelection={true}
-              components={{ Toolbar: GridToolbar }}
-              onSelectionModelChange={(ids) => {
-                const selectedIDs = new Set(ids);
-                const selectedRows = rows.filter((row) =>
-                selectedIDs.has(row.id),
-              );
-  
-            setSelectedRows(selectedRows);
-          }}
-        />
-      </div>
+            
+          </div>
 
     </div>
   );
