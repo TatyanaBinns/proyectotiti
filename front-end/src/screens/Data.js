@@ -16,18 +16,19 @@ function Data() {
   var selectedRowIds = localStorage.getItem("trackerIDs");
 
   const rows_ucf = [
-    {name: "Student Union", location: [28.60173887418597, -81.2004132871915]},
-    {name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434]},
-    {name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942]}
+    {id:1, name: "Student Union", location: [28.60173887418597, -81.2004132871915]},
+    {id:2, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434]},
+    {id:3, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942]}
   ];
   
   const rows_resturants = [
-    {name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424]},
-    {name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225]},
-    {name: "Panda Express", location: [28.601969757832723, -81.2007283106182]}
+    {id:4, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424]},
+    {id:5, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225]},
+    {id:6, name: "Panda Express", location: [28.601969757832723, -81.2007283106182]}
   ];
 
   const columns = [
+    { field: 'id', headerName: 'id', width: 200 },
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'location', headerName: 'Location', width: 200}
   ];
