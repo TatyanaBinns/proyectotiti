@@ -155,7 +155,16 @@
   }
 
   .Table-container{
-    width: 90%;
+    width: 40%;
+    height: 80%;
+    background-color: white;
+  }
+
+  .Table-container-data{
+    position: absolute;
+    right: 50px;
+    top: 105px;
+    width: 40%;
     height: 80%;
     background-color: white;
   }

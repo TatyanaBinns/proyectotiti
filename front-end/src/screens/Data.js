@@ -3,6 +3,9 @@ import "./styles.css";
 import Header from "./Header";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import axios from "axios";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import React, {useState } from "react";
+
 
 
 
@@ -10,6 +13,10 @@ function Data() {
  
   const position = [10.633, -75.241];
   
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [error, setError] = useState("");
+  var selectedRowIds = [];
+  var selectedRowNames = [];
 
   return (
     <div className="Data-header">
@@ -25,6 +32,30 @@ function Data() {
             </Popup>
           </Marker>
           </MapContainer>
+        
+
+          <div className="Table-container-data">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              checkboxSelection
+              disableSelectionOnClick
+              autoHeight
+              disableMultipleSelection={true}
+              components={{ Toolbar: GridToolbar }}
+              onSelectionModelChange={(ids) => {
+                const selectedIDs = new Set(ids);
+                const selectedRows = rows.filter((row) =>
+                selectedIDs.has(row.id),
+              );
+  
+            setSelectedRows(selectedRows);
+          }}
+        />
+      </div>
+
     </div>
   );
 }
