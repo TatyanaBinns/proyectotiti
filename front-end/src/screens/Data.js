@@ -12,7 +12,7 @@ import React, {useState } from "react";
 function Data() {
  
   const position = [10.633, -75.241];
-  const rows = [];
+  let rows = [];
   var selectedRowIds = localStorage.getItem("trackerIDs");
 
   const rows_ucf = [
