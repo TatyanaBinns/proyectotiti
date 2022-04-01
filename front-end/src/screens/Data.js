@@ -27,6 +27,21 @@ function Data() {
     {id:6, name: "Panda Express", location: [28.601969757832723, -81.2007283106182]}
   ];
 
+  let combined = Object.assign(rows_ucf, rows_resturants);
+
+  if(selectedRowIds.length > 1)
+  {
+    console.log(combined);
+  }
+  else if(selectedRowIds.length == 1 && selectedRowIds[0] == 1)
+  {
+    console.log(rows_ucf);
+  }
+  else if(selectedRowIds.length == 1 && selectedRowIds[0] == 2)
+  {
+    console.log(rows_resturants);
+  }
+
   const columns = [
     { field: 'id', headerName: 'id', width: 200 },
     { field: 'name', headerName: 'Name', width: 200 },
