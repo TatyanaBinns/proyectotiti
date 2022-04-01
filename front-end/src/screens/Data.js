@@ -13,10 +13,19 @@ function Data() {
  
   const position = [10.633, -75.241];
   
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [error, setError] = useState("");
   var selectedRowIds = [];
   var selectedRowNames = [];
+
+  const columns = [
+    { field: 'id', headerName: 'Tracker ID', width: 200 },
+    { field: 'trackerName', headerName: 'Tracker Name', width: 200}
+  ];
+  
+  const rows = [
+    { id: 1, trackerName: "UCF Buildings"},
+    { id: 2, trackerName: "Resturants"},
+    { id: 3, trackerName: "Random Points"},
+  ];
 
   return (
     <div className="Data-header">
@@ -35,7 +44,16 @@ function Data() {
         
 
           <div className="Table-container-data">
-            
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              checkboxSelection
+              disableSelectionOnClick
+              autoHeight
+              components={{ Toolbar: GridToolbar }}
+        />
           </div>
 
     </div>
