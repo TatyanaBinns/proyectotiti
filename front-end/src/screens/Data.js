@@ -74,8 +74,8 @@ function Data() {
             <Marker
               key={point.id}
               position={[
-                point.location[1],
-                point.location[0]
+                point.location[0],
+                point.location[1]
               ]}
               onClick={() => {
                 setActivePark(point);
