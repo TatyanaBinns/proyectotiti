@@ -62,7 +62,7 @@ function Data() {
   return (
     <div className="Data-header">
       <Header/>
-          <MapContainer center={position} zoom={20} scrollWheelZoom={true}>
+          <MapContainer center={position} zoom={15} scrollWheelZoom={true}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
