@@ -20,10 +20,6 @@ import {
       href: "/home",
     },
     {
-      label: "Data",
-      href: "/data",
-    },
-    {
       label: "Admin",
       href: "/admin"
     },
