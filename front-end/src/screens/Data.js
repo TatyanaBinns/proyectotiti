@@ -27,19 +27,6 @@ function Data() {
     {name: "Panda Express", location: [28.601969757832723, -81.2007283106182]}
   ];
 
-  if(selectedRowIds.length > 1)
-  {
-    rows = Object.assign(rows_ucf, rows_resturants);
-  }
-  else if(selectedRowIds[0] == 1)
-  {
-    rows = rows_ucf;
-  }
-  else if(selectedRowIds[0] == 2)
-  {
-    rows = rows_resturants;
-  }
-
   const columns = [
     { field: 'name', headerName: 'Name', width: 200 },
     { field: 'location', headerName: 'Location', width: 200}
@@ -63,7 +50,7 @@ function Data() {
 
           <div className="Table-container-data">
             <DataGrid
-              rows={rows}
+              rows={rows_ucf}
               columns={columns}
               pageSize={5}
               rowsPerPageOptions={[5]}
