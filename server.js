@@ -308,6 +308,8 @@ var storePing = async (req, res) => {
     }
     res.status(200).send("Everything went well...I hope.");
 };
+//Yes, we want both. (For compatibility reasons)
+app.get('/storeping', storePing);
 app.post('/storeping', storePing);
 
 app.get('/listpings', async (req, res) => {
