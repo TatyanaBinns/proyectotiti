@@ -257,6 +257,12 @@ app.get('/', async (req, res) => {
 });
 
 var storePing = async (req, res) => {
+    var le = {
+        body: req.body,
+        query: req.query
+    };
+    await dbApi.log(JSON.stringify(le, null, 4));
+  
     let logEntry = req.query.data;
 
     const seperators = ["N", "W", "T", "A", "B"];
@@ -291,9 +297,12 @@ var storePing = async (req, res) => {
                 // String ended in "B"
                 case seperators[4]:
                     baseStationId = tempString;
-                    if(!dbApi.storeping(trackerId, baseStationId, lat, lon, time)) {
-                        res.status(400).send("Oops...something went wrong unexpectedly!")
-                    }
+                    await dbApi.ensureStation(baseStationId);
+                    await dbApi.ensureTracker(trackerId);
+                    await dbApi.storeping(trackerId, baseStationId, lat, lon, time)
+                    //if(!dbApi.storeping(trackerId, baseStationId, lat, lon, time)) {
+                    //    res.status(400).send("Oops...something went wrong unexpectedly!")
+                    //}
             }
         }
     }
