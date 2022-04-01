@@ -18,7 +18,6 @@ function Home() {
   const rows = [
     { id: 1, trackerName: "UCF Buildings"},
     { id: 2, trackerName: "Resturants"},
-    { id: 3, trackerName: "Random Points"},
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
