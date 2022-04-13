@@ -56,15 +56,23 @@ async function dbInit(){
      *             query. Should be an array.
      */
     async function exec(query, values){
+		//If we have a working database connection (client and/or client.query will be undefined if not)
         if(client && client.query) {
+			//Log what we're doing, this is for debug purposes for now
             console.log("Running query: \n"+query);
+			//Actually run the query, and wait for the result
             var res = (await client.query(query, values));
+			//For debug purposes, print the result out
             console.log ("Result: \n"+JSON.stringify(res.rows));
+			//Return it to the caller.
             return res.rows;
         }
+		//If we don't have a working database connection, just log stuff out.
         console.log("\nWould be running query: \n"+query);
+		//Only log values if we were passed some values to use
         if(values)
             console.log("With Values: \n"+JSON.stringify(values));
+		//Return an empty array. This should prevent things crashing, though they may not function as intended.
         return [];
     }
     
@@ -129,106 +137,40 @@ async function dbInit(){
     //Store the uuid and animalId in the Tracker table and return the generated trackerId
     dbApi.registerTracker = (uuid, animalId) => exec('INSERT INTO public.trackers (animalid, trackeruuid) VALUES($1, $2) RETURNING trackerid;',[uuid, animalId]);
 
-    // TODO: Get all trackers from DB matching animalId and uuid provided (optionally provided by the user)
-    dbApi.getTrackers = (animalId, uuid) => {
-        console.log(`Getting the trackers matching the animalId: ${animalId} and the uuid: ${uuid}...`)
-        let trackers = {
-            tracker1: {
-                animalId: "monkey_01",
-                uuid: "8675309"
-            },
-            tracker2: {
-                animalId: "monkey_01",
-                uuid: "8675309"
-            }
-        }
-        return trackers;
-    }
+	// Get all trackers which haven't been linked to an animal yet.
+    dbApi.getUnlinkedTrackers = () => exec("select * from trackers where animalid = -1;");
 
-    // TODO: Update the tracker with the trackerid provided using the new_uuid and/or new_animalId
-    dbApi.updateTracker = (trackerId, new_uuid, new_animalId) => {
-        console.log(`Updating the trackers matching the trackerId: ${trackerId}...`)
-        let tracker = {
-            animalId: new_animalId,
-            uuid: new_uuid
-        };
-        return tracker;
-    };
+    // Get all trackers from DB matching animalId and uuid provided (optionally provided by the user)
+    dbApi.getTrackers = (animalId) => exec("select * from trackers where animalid = $1;", [animalId]);
 
-    // TODO: Remove the tracker with the provided trackerId from the DB table of trackers
-    dbApi.deleteTracker = (trackerId) => {
-        console.log(`Deleting the tracker with trackerId: ${trackerId}`);
-        return true;
-    };
+    // Update the tracker with the trackerid using the provided new_animalId
+    dbApi.updateTracker = (trackerId, new_animalId) => 
+			exec("UPDATE trackers SET animalid=$2 WHERE trackerid=$1;", [trackerId, new_animalId]);
 
-    // TODO: Register the Base Station using the provided arguments
-    dbApi.registerBaseStation = (name, location, description) => {
-        console.log(`Registering the base station with name: ${name}, location: ${location} and description: ${description}`);
-        let stationId = 8675309;
-        return stationId;
-    };
+    // Remove the tracker with the provided trackerId from the DB table of trackers
+    dbApi.deleteTracker = (trackerId) => 
+			exec("DELETE FROM trackers WHERE trackeruuid=$1;",[trackerId]);
 
-    // TODO: Get all base stations from the database matching the provided location and name (if any provided)
-    dbApi.getBaseStations = (location, name) => {
-        console.log(`Getting base station(s) matching location: ${location} and name: ${name}...`);
-        // Example base station
-        let baseStations = {
-            baseStation1: {
-                stationId: "1234567",
-                name: "BaseStation_01",
-                location: "(3.14159, 3.14159)",
-                description: "The very first base station."
-            },
-            baseStation2: {
-                stationId: "8675309",
-                name: "BaseStation_02",
-                location: "(3.14159, 3.14159)",
-                description: "The very second base station."
-            }
-        }
-        return baseStations;
-    };
+    // Get all base stations from the database
+    dbApi.getBaseStations = (location, name) => exec("select * from basestations;")
 
-    // TODO: Update the name, location and/or description of the base station matching the provided stationId
-    dbApi.updateBaseStation = (stationId, new_name, new_location, new_description) => {
-        console.log(`Updating the base station matching the stationId: ${stationId}...`)
-        let baseStation = {
-            name: new_name,
-            location: new_location,
-            description: new_description
-        };
-        return baseStation;
-    };
+    // Update the name, location and/or description of the base station matching the provided stationId
+    dbApi.updateBaseStation = (stationId, new_name, new_lat, new_lon, new_description) => 
+			exec("UPDATE basestations SET \"name\"=$2, description=$5, \"location\" = point($3, $4) WHERE stationid=$1;",
+				[stationId, new_name, new_lat, new_lon, new_description]);
 
-    dbApi.deleteBaseStation = (stationId) => {
-        console.log(`Deleting the base station with stationId: ${stationId}`);
-        return true;
-    };
+	// Delete a base station given the station id
+    dbApi.deleteBaseStation = (stationId) => exec("DELETE FROM basestations WHERE stationid=$1;",[stationId]);
 
-    dbApi.getPings = (trackerId, startTime, endTime) => {
-        // IF there is no trackerID get * (ALL) trackers
-        // If there is no start
-
-        console.log(`Getting all pings from tracker: ${trackerId} starting from ${startTime} and ending at ${endTime}`);
-        // A sample JSON array object containing multiple pings
-        let pings = [
-            {
-                timestamp: Date.UTC(2022, 3, 10, 12, 35, 30, 999),
-                trackerid: 98765,
-                stationid: 8675309,
-                location: "somewhere",
-                velocity: "fast"
-            },
-            {
-                timestamp: Date.now(),
-                trackerid: 98765,
-                stationid: 8675309,
-                location: "anywhere",
-                velocity: "slow"
-            }
-        ]
-        return pings;
-    };
+	// Get pings. If trackerId isn't set, gets all pings between the two times, otherwise filters by the tracker id
+    dbApi.getPings = (startTime, endTime, trackerId) => {
+		if(!trackerId || trackerId == "")
+			return exec("SELECT * FROM pings where \"timestamp\" >= $1 and \"timestamp\" <= $2;", [startTime, endTime]);
+		return exec("SELECT pingid, \"timestamp\", p.trackeruuid, stationuuid, \"location\" "+
+			        "FROM pings as p join trackers t on p.trackeruuid =t.trackeruuid "+
+					"where t.trackerid = $1 "+
+					"and \"timestamp\" >= $2 and \"timestamp\" <= $3;", [trackerId, startTime, endTime]);
+	};
 
     console.log("Database API Loaded");
 }
