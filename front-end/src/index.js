@@ -11,6 +11,7 @@ import Settings from './screens/Settings';
 import Signup from './screens/Signup';
 import Admin from './screens/Admin';
 import RegisterSuccess from './screens/RegisterSuccess';
+import Resetpassword from './screens/ResetPassword';
 
 
 ReactDOM.render(
@@ -25,6 +26,7 @@ ReactDOM.render(
       <Route path="/forgotpassword" element={<Forgotpassword/>}/>
       <Route path="/admin" element={<Admin/>}/>
       <Route path="/registersuccess" element={<RegisterSuccess/>}/>
+      <Route path="/resetpassword" element={<Resetpassword/>}/>
     </Routes>
   </BrowserRouter>
  ,
