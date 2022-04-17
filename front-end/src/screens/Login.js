@@ -2,7 +2,6 @@ import './styles.css';
 import {Box, Button, TextField,Typography} from '@material-ui/core'
 import React, { useState } from "react";
 import {Link,useNavigate} from 'react-router-dom';
-import axios from "axios";
 
 function Login() {
     let navigate = useNavigate();
@@ -22,17 +21,17 @@ function Login() {
           Promise.all
           ([
             axios.post('https://proyectotiti.herokuapp.com/login', {username, password}),
-            //axios.get('https://proyectotiti.herokuapp.com/listpings')
+            axios.get('https://proyectotiti.herokuapp.com/trackers/-1')
           ])
         .then(response => {
           const login_success_code = response[0].status;
-          //const pings = JSON.parse(response[1].data);
+          const trackers = JSON.parse(response[1].data);
 
           
           if(login_success_code == 200)
           {
             localStorage.setItem('username', username);
-            //localStorage.setItem('pings', pings);
+            localStorage.setItem('pings', trackers);
             navigate("/home");
           }
         })
