@@ -2,6 +2,7 @@ import './styles.css'
 import {Box, Button, TextField,Typography} from '@material-ui/core'
 import React, { useState } from "react";
 import {Link} from 'react-router-dom';
+import Header from "./Header";
 
 
 
