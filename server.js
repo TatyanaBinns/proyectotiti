@@ -209,7 +209,7 @@ var storePing = async (req, res) => {
 
     const seperators = ["N", "W", "T", "A", "B"];
     let lat = "", lon = "", timeString = "", trackerId = "", baseStationId = "", tempString = "", prefix = "";
-    let today = new Date();
+    let today = new Date(), utcDate = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0');
     let yyyy = today.getFullYear();
@@ -255,8 +255,6 @@ var storePing = async (req, res) => {
                 // String ended in "T"
                 case seperators[2]:
                     timeString = tempString.split(",");
-
-                    let utcDate = new Date();
                     utcDate = new Date(Date.UTC(yyyy, mm, dd, timeString[0], timeString[1], timeString[2]));
                     tempString = "";
                     break;
@@ -270,7 +268,7 @@ var storePing = async (req, res) => {
                     baseStationId = tempString;
                     await dbApi.ensureStation(baseStationId);
                     await dbApi.ensureTracker(trackerId);
-                    await dbApi.storeping(trackerId, baseStationId, lat, lon, time)
+                    await dbApi.storeping(trackerId, baseStationId, lat, lon, utcDate)
             }
         }
     }
