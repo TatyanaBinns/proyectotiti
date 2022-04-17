@@ -211,7 +211,7 @@ var storePing = async (req, res) => {
     let lat = "", lon = "", timeString = "", trackerId = "", baseStationId = "", tempString = "", prefix = "";
     let today = new Date(), utcDate = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let mm = String(today.getMonth()).padStart(2, '0');
     let yyyy = today.getFullYear();
 
     for(let i = 0; i < logEntry.length; i++) {
