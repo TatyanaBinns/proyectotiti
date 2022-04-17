@@ -208,7 +208,11 @@ var storePing = async (req, res) => {
     let logEntry = req.query.data;
 
     const seperators = ["N", "W", "T", "A", "B"];
-    let lat = "", lon = "", time = "", trackerId = "", baseStationId = "", tempString = "", prefix = "";
+    let lat = "", lon = "", timeString = "", trackerId = "", baseStationId = "", tempString = "", prefix = "";
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
 
     for(let i = 0; i < logEntry.length; i++) {
         if(!seperators.includes(logEntry[i])) {
@@ -248,9 +252,12 @@ var storePing = async (req, res) => {
 
                     tempString = "";
                     break;
-                // String ender in "T"
+                // String ended in "T"
                 case seperators[2]:
-                    time = tempString.split(",").join("");
+                    timeString = tempString.split(",");
+
+                    let utcDate = new Date();
+                    utcDate = new Date(Date.UTC(yyyy, mm, dd, timeString[0], timeString[1], timeString[2]));
                     tempString = "";
                     break;
                 // String ended in "A"
@@ -264,9 +271,6 @@ var storePing = async (req, res) => {
                     await dbApi.ensureStation(baseStationId);
                     await dbApi.ensureTracker(trackerId);
                     await dbApi.storeping(trackerId, baseStationId, lat, lon, time)
-                    //if(!dbApi.storeping(trackerId, baseStationId, lat, lon, time)) {
-                    //    res.status(400).send("Oops...something went wrong unexpectedly!")
-                    //}
             }
         }
     }
