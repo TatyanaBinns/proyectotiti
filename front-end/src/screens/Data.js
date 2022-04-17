@@ -50,9 +50,9 @@ function Data() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'id', width: 200 },
+    { field: 'id', headerName: 'id', width: 50 },
     { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'location', headerName: 'Location', width: 200}
+    { field: 'location', headerName: 'Location', width: 350}
   ];
   
 
