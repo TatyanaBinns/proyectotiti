@@ -199,6 +199,8 @@ app.get('/', async (req, res) => {
 });
 
 var storePing = async (req, res) => {
+    // 2236.565975N --> 22+36.565975/60 = 22.6094329
+
     var le = {
         body: req.body,
         query: req.query
@@ -217,13 +219,35 @@ var storePing = async (req, res) => {
             switch (logEntry[i]) {
                 // String ended in "N"
                 case seperators[0]:
-                    lat = tempString;
+                    // Convert latitude from degrees-minutes to degrees
+                    prefix = tempString.substring(0, 2);
+                    lat = (tempString.substring(2) / 60);
+                    lat = lat.toString();
+
+                    while (lat.startsWith('0')) {
+                        lat = lat.substring(1)
+                    }
+                    lat = prefix + lat;
+
+                    console.log(lat)
+
                     tempString = "";
                     break;
 
                 // String ended in "W"
                 case seperators[1]:
-                    lon = tempString;
+                    // Convert longitude from degrees-minutes to degrees
+                    let prefix = tempString.substring(0, 2);
+                    lon = (tempString.substring(2) / 60);
+                    lon = lon.toString();
+
+                    while (lon.startsWith('0')) {
+                        lon = lon.substring(1)
+                    }
+                    lon = prefix + lon;
+
+                    console.log(lon)
+
                     tempString = "";
                     break;
                 // String ender in "T"
@@ -248,7 +272,7 @@ var storePing = async (req, res) => {
             }
         }
     }
-    res.status(200).send("Everything went well...I hope.");
+    res.status(200).send("Succesfully sent pings.");
 };
 //Yes, we want both. (For compatibility reasons)
 app.get('/storeping', storePing);
