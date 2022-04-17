@@ -22,7 +22,7 @@ function Settings() {
             className="form-input"
             size="large"
           >
-            Reset Password
+            Reset Password 
           </Button>
         </Link>
       </Box>
