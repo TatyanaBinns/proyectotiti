@@ -199,8 +199,6 @@ app.get('/', async (req, res) => {
 });
 
 var storePing = async (req, res) => {
-    // 2236.565975N --> 22+36.565975/60 = 22.6094329
-
     var le = {
         body: req.body,
         query: req.query
@@ -210,7 +208,7 @@ var storePing = async (req, res) => {
     let logEntry = req.query.data;
 
     const seperators = ["N", "W", "T", "A", "B"];
-    let lat = "", lon = "", time = "", trackerId = "", baseStationId = "", tempString = "";
+    let lat = "", lon = "", time = "", trackerId = "", baseStationId = "", tempString = "", prefix = "";
 
     for(let i = 0; i < logEntry.length; i++) {
         if(!seperators.includes(logEntry[i])) {
@@ -237,7 +235,7 @@ var storePing = async (req, res) => {
                 // String ended in "W"
                 case seperators[1]:
                     // Convert longitude from degrees-minutes to degrees
-                    let prefix = tempString.substring(0, 2);
+                    prefix = tempString.substring(0, 2);
                     lon = (tempString.substring(2) / 60);
                     lon = lon.toString();
 
