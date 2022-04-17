@@ -38,17 +38,14 @@ function Data() {
 
   if(selectedRowIds.length > 1)
   {
-    console.log(combined);
     rows = combined;
   }
   else if(selectedRowIds.length == 1 && selectedRowIds[0] == 1)
   {
-    console.log(rows_ucf);
     rows = rows_ucf;
   }
   else if(selectedRowIds.length == 1 && selectedRowIds[0] == 2)
   {
-    console.log(rows_resturants);
     rows = rows_resturants;
   }
 
