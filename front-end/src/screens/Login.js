@@ -25,7 +25,7 @@ function Login() {
           ])
         .then(response => {
           const login_success_code = response[0].status;
-          const trackers = JSON.parse(response[1].data);
+          const trackers = response[1].data;
 
           
           if(login_success_code == 200)
