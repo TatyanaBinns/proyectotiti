@@ -457,7 +457,6 @@ const updatePassword = async (req, res) => {
 };
 
 //====== Tracker Controller Functions ======
-// Change this to
 const registerTracker = async (req, res) => {
     let { uuid, animalId } = req.body;
     if(!uuid || !animalId) {
@@ -561,37 +560,6 @@ const getPings = async (req, res) => {
     res.status(200).send(JSON.stringify(pings));
 };
 
-const exportCsv = async (req, res) => {
-    let trackerId = req.params.trackerId;
-    let startTime = req.params.startTime;
-    let endTime = req.params.endTime;
-    console.log(`TrackerID: ${trackerId}, StartTime: ${startTime}, EndTime: ${endTime}`);
-
-    // Get the data from the database
-    let pings = dbApi.getPings(trackerId, startTime, endTime);
-
-    // Export the data to a CSV
-    let filepath = `${Date.now().toString()}_proyecto_titi_fastcsv.csv`;
-    const ws = fs.createWriteStream(filepath);
-    fastcsv
-        .write(pings, { headers: true })
-        .on("finish", function() {
-            console.log(`Successfully wrote data to ${filepath}`);
-        })
-        .pipe(ws);
-
-    // Download the file
-    res.download(filepath, error => {
-        if(error){
-            console.log(`${error.message}`);
-        } else console.log(`Successfully downloaded ${filepath}`);
-    });
-
-    // TODO: Delete the file from the server
-
-    res.sendStatus(200);
-}
-
 //======= Admin Routes =======
 // Restrict to Admin
 app.get('/get-users/:uid', getUsers);
@@ -614,19 +582,16 @@ app.put('/trackers', updateTracker);
 app.delete('/trackers/:trackerId', deleteTracker); // Restrict to Admin
 
 //======= Base Station Routes ======
-// TODO: Create endpoint to link base station to
 app.post('/base-stations', registerBaseStation);
 app.get('/base-stations/:location?/:name?', getBaseStations);
 app.put('/base-stations', updateBaseStation);
 app.delete('/base-stations/:stationId', deleteBaseStation); // Restrict to Admin
 
 //======= Ping Routes ======
-// TODO: Add download CSV endpoint OR add logic to export endpoint for user to download CSV file
 app.get('/pings/:trackerId/:startTime?-:endTime?', getPings);
-app.get('/pings/export/:trackerId/:startTime?-:endTime?', exportCsv);
 
 //======= Animal Routes ======
-// TODO: This is a stretch goal
+// TODO
 
 //======= Middleware ======
 // TODO: Create middleware OR helper function to verify user is signed in
