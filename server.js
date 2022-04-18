@@ -473,7 +473,7 @@ const registerTracker = async (req, res) => {
 const getTrackers = async (req, res) => {
     let { animalId, uuid } = req.params;
     let trackers = dbApi.getTrackers(animalId, uuid);
-    res.status(200).send(`Tracker(s): ${JSON.stringify(trackers)} matching animalId: ${animalId} and uuid: ${uuid}...`);
+    res.status(200).send(JSON.stringify(trackers));
 };
 
 const updateTracker = async (req, res) => {
