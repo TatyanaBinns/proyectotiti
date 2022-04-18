@@ -24,10 +24,6 @@ import {
       href: "/admin"
     },
     {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
       label: "Log Out",
       href: "/",
     },

@@ -1,7 +1,7 @@
 import './styles.css';
 import {Box, Button, TextField,Typography} from '@material-ui/core'
 import React, { useState } from "react";
-import {Link,useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 function Login() {
     let navigate = useNavigate();
@@ -85,9 +85,6 @@ function Login() {
           >
             Login
           </Button>
-          <Link to="/forgotpassword">
-            <div>Forgot Password?</div>
-          </Link>
 
         </form>
       </Box>
