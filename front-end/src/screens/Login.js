@@ -31,7 +31,7 @@ function Login() {
           if(login_success_code == 200)
           {
             localStorage.setItem('username', username);
-            localStorage.setItem('pings', trackers);
+            localStorage.setItem('trackers', trackers);
             navigate("/home");
           }
         })
