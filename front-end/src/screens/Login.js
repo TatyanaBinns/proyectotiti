@@ -10,6 +10,7 @@ function Login() {
     const [password, setPassword] = useState("");
 
     const axios = require('axios');
+    var animalID = -1;
   
     const submitForm = () => {
       if (username == '' || password == '')
@@ -21,7 +22,12 @@ function Login() {
           Promise.all
           ([
             axios.post('https://proyectotiti.herokuapp.com/login', {username, password}),
-            axios.get('https://proyectotiti.herokuapp.com/trackers/-1')
+            axios.get('https://proyectotiti.herokuapp.com/trackers/', null, {
+              params: 
+              {
+                animalId: animalID,
+              },
+          })
           ])
         .then(response => {
           const login_success_code = response[0].status;
