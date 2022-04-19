@@ -94,6 +94,7 @@ async function dbInit(){
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
 
+    // TODO: Please return the user's uid
     dbApi.userNameExists = async username => {
         var res = (await exec("SELECT uid FROM users where username=$1;",[username]));
         console.log("Result Length: "+res.length);
@@ -382,14 +383,16 @@ const login = async (req, res) => {
     console.log('Password: ' +JSON.stringify(password));
     console.log('Body: ' +JSON.stringify(req.body));
     if (username && password) {
-        if(await dbApi.userNameExists(username)) {
+        let uid = await dbApi.userNameExists(username);
+        if(uid) {
             let hashedPassword = hashPassword(password);
             let verified = (await dbApi.verifyCredentials(username, hashedPassword));
             console.log('Valid user? ' + JSON.stringify(verified));
             if(verified) {
                 let jwToken = dbApi.loginUser(username, hashedPassword);
                 // persist the token as 'Q' in cookie with expiry date
-                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)}).sendStatus(200);
+                res.cookie("Q", jwToken, {expires: new Date(Date.now() + 900000)});
+                res.status(200).send(JSON.stringify(uid))
             } else res.status(400).send("The username and password combination provided was invalid.");
         } else res.status(400).send("We didn't find your account. Please ensure the username you provided is spelled correctly.");
     } else res.status(400).send("Please fill out all available fields.");
