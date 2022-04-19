@@ -10,7 +10,7 @@ function Login() {
     const [password, setPassword] = useState("");
 
     const axios = require('axios');
-    var animalID = -1;
+    var animalID = "-1";
   
     const submitForm = () => {
       if (username == '' || password == '')
