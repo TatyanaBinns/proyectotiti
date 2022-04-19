@@ -32,6 +32,7 @@ function Login() {
           {
             localStorage.setItem('username', username);
             localStorage.setItem('trackers', trackers);
+            console.log(localStorage.getItem(trackers))
             navigate("/home");
           }
         })
