@@ -1,23 +1,26 @@
 import {Box,Typography, Button} from '@material-ui/core';
 import "./styles.css";
 import Header from "./Header";
+import NonAdminHeader from './NonAdminHeader';
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import React, {useState } from "react";
 import {useNavigate} from 'react-router-dom';
 
 
 
+
 function Home() {
   let navigate = useNavigate();
+  const axios = require('axios');
 
   const columns = [
     { field: 'id', headerName: 'Tracker ID', width: 200 },
-    { field: 'trackerName', headerName: 'Tracker Name', width: 200}
+    { field: 'animalID', headerName: 'Animal ID', width: 200}
   ];
   
   const rows = [
-    { id: 1, trackerName: "UCF Buildings"},
-    { id: 2, trackerName: "Resturants"},
+    { id: 1, animalID: "-1"},
+    { id: 2, animalID: "-1"},
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
@@ -42,6 +45,10 @@ function Home() {
       localStorage.setItem("trackerIDs", selectedRowIds);
       localStorage.setItem("trackerNames", selectedRowNames);
 
+      axios.get('https://proyectotiti.herokuapp.com/pings/',{ params: { trackerId: 1 } })
+      .then(function (response) {
+        console.log(response);
+      })
       navigate("/data");
     }
     
@@ -50,7 +57,16 @@ function Home() {
 
   return (
     <div className="Settings-header">
-      <Header/>
+      
+      {localStorage.getItem("username") == "admin" &&
+            
+            <Header/>
+      }
+      {localStorage.getItem("username") != "admin" &&
+            
+            <NonAdminHeader/>
+      }
+      
       <div className="Table-container">
         <DataGrid
           rows={rows}

@@ -66,7 +66,6 @@ function Admin() {
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          checkboxSelection
           disableSelectionOnClick
           autoHeight
           disableMultipleSelection={true}

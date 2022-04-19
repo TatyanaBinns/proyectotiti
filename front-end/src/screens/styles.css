@@ -147,7 +147,7 @@
   }
 
   .leaflet-container {
-    width: 50%;
+    width: 40%;
     height: 80%;
     position: absolute;
     left: 50px;
@@ -164,7 +164,7 @@
     position: absolute;
     right: 50px;
     top: 105px;
-    width: 40%;
+    width: 50%;
     height: 80%;
     background-color: white;
   }

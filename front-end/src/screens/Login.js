@@ -22,23 +22,17 @@ function Login() {
           Promise.all
           ([
             axios.post('https://proyectotiti.herokuapp.com/login', {username, password}),
-            axios.get('https://proyectotiti.herokuapp.com/trackers/', null, {
-              params: 
-              {
-                animalId: animalID,
-              },
-          })
+            axios.get('https://proyectotiti.herokuapp.com/trackers/-1')
           ])
         .then(response => {
           const login_success_code = response[0].status;
-          const trackers = response[1].data;
-
+          const trackers = response[1];
+          console.log(trackers);
           
           if(login_success_code == 200)
           {
             localStorage.setItem('username', username);
             localStorage.setItem('trackers', trackers);
-            console.log(localStorage.getItem(trackers))
             navigate("/home");
           }
         })
