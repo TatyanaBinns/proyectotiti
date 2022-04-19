@@ -98,7 +98,9 @@ async function dbInit(){
     dbApi.userNameExists = async username => {
         var res = (await exec("SELECT uid FROM users where username=$1;",[username]));
         console.log("Result Length: "+res.length);
-        return res.length > 0;
+	if (res.length > 0)
+	    return res[0].uid;
+        return -1;
     };
 
     dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
