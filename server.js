@@ -93,8 +93,7 @@ async function dbInit(){
     dbApi.listpings = () => exec('SELECT * FROM pings;');
 
     dbApi.listlogs = () => exec('SELECT * FROM logs;');
-
-    // TODO: Please return the user's uid
+    
     dbApi.userNameExists = async username => {
         var res = (await exec("SELECT uid FROM users where username=$1;",[username]));
         console.log("Result Length: "+res.length);
