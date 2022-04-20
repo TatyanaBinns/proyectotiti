@@ -28,14 +28,14 @@ function Data() {
   ];
 
   const tracker3 = [
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"}
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"}
   ];
   const tracker4 = [
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined2_1 = [
@@ -48,42 +48,42 @@ function Data() {
   const combined2_2 = [
     {id:1, name: "1", location: [28.791145866666668,-81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"}
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"}
   ];
   
   const combined2_3 = [
     {id:1, name: "1", location: [28.791145866666668,-81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined2_4 = [
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"}
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"}
   ];
 
   const combined2_5 = [
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined2_6 = [
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined3_1 = [
@@ -91,9 +91,9 @@ function Data() {
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"}
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"}
   ];
 
   const combined3_2 = [
@@ -101,31 +101,31 @@ function Data() {
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined3_3 = [
     {id:1, name: "1", location: [28.791145866666668,-81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-1922:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   const combined3_4 = [
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
 
@@ -135,12 +135,12 @@ function Data() {
     {id:2, name: "1", location: [28.791145866666668, -81.20260815], time: "2022-04-17 16:34:39.000Z"},
     {id:3, name: "2", location: [18.791, -81.035815], time: "2022-04-17 16:34:39.000Z"},
     {id:4, name: "2", location: [18.791, -81.035815], time: "2022-04-18 16:34:39.000Z"},
-    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 20:56:39.000Z"},
-    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 20:56:39.000Z"},
-    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 20:56:39.000Z"},
-    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 20:56:39.000Z"},
-    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 20:56:39.000Z"},
-    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 20:56:39.000Z"},
+    {id:5, name: "Chick-fil-a", location: [28.601385743573186, -81.20121110824424], time: "2022-04-19 22:26:04.000Z"},
+    {id:6, name: "Einstein Bros. Bagels", location: [28.601494069043923, -81.19896878149225], time: "2022-04-19 22:26:04.000Z"},
+    {id:7, name: "Panda Express", location: [28.601969757832723, -81.2007283106182], time: "2022-04-19 22:26:04.000Z"},
+    {id:8, name: "Student Union", location: [28.60173887418597, -81.2004132871915], time: "2022-04-19 22:26:04.000Z"},
+    {id:9, name: "Classroom Building II", location: [28.604465911244027, -81.20014358904434], time: "2022-04-19 22:26:04.000Z"},
+    {id:10, name: "Engineering Building I", location: [28.602068663139402, -81.19879712010942], time: "2022-04-19 22:26:04.000Z"},
   ];
 
   if(selectedRowIds.length == 7)
