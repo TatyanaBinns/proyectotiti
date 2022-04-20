@@ -7,6 +7,11 @@ import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 
 function Admin() {
 
+  axios.get('https://proyectotiti.herokuapp.com/get-users/', { params: { uid: localStorage.getItem("userId") } })
+    .then(response => {
+      console.log(response);
+    })
+
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     {

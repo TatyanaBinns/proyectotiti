@@ -21,6 +21,8 @@ function Home() {
   const rows = [
     { id: 1, animalID: "-1"},
     { id: 2, animalID: "-1"},
+    { id: 3, animalID: "-1"},
+    { id: 4, animalID: "-1"}
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
