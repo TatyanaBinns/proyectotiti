@@ -268,6 +268,7 @@ var storePing = async (req, res) => {
                 // String ended in "B"
                 case seperators[4]:
                     baseStationId = tempString;
+	            tempString="";
                     await dbApi.ensureStation(baseStationId);
                     await dbApi.ensureTracker(trackerId);
                     await dbApi.storeping(trackerId, baseStationId, lat, lon, utcDate)
