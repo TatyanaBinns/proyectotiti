@@ -83,21 +83,7 @@ function Admin() {
   
             setSelectedRows(selectedRows);
           }}
-        />
-        <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{
-              backgroundColor: "#299846",
-            }}
-            margin = "normal"
-            className="form-input"
-            size="large"
-            onClick={submitForm}
-          >
-            Selected User
-          </Button>  
+        /> 
       </div>
     </div>
   );
