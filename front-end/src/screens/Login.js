@@ -8,6 +8,7 @@ function Login() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const axios = require('axios');
     var animalID = "-1";
@@ -36,6 +37,10 @@ function Login() {
             localStorage.setItem('trackers', trackers);
             localStorage.setItem('userId', userId)
             navigate("/home");
+          }
+          else
+          {
+            setErrorMessage = "Invalid Username/Password";
           }
         })
         .catch(error => {
@@ -74,6 +79,12 @@ function Login() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
+          {errorMessage.length > 0 &&
+            
+            <Typography>{errorMessage}</Typography>
+          }
+
+
           <Button
             variant="contained"
             color="primary"
