@@ -1,12 +1,11 @@
 const express = require('express')
 const bodyParser =require('body-parser')
+const { body, validationResult } = require('express-validator');
 const { Client } = require('pg');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 8;
-const fastcsv = require("fast-csv");
-const fs = require('fs');
 
 //===== Pull in environment variables from Heroku
 let port = process.env.PORT;
@@ -182,7 +181,7 @@ dbInit().catch(err => console.log(err));
 const app = express();
 const path = require('path');
 
-app.use(express.static(path.join(__dirname, 'front-end/build'))); 
+app.use(express.static(path.join(__dirname, 'front-end/build')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -360,22 +359,48 @@ const deleteUser = async (req, res) => {
 const register = async (req, res) => {
     const { username, password, first_name, last_name } = req.body;
 
-    // Verify all fields were properly filled
-    if (username && password && first_name && last_name) {
-        //============== Check if the username is already taken =============== //
-        if(!(await dbApi.userNameExists(username))) {
-            let hashedPassword = hashPassword(password);
-            let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
-            if(userAdded){
-                res.json({body: JSON.stringify(req.body), status: "success"});
-            } else {
-                res.json({status: "failure"});
-            }
+    //============== Check if the username is already taken =============== //
+    if(!(await dbApi.userNameExists(username))) {
+        let hashedPassword = hashPassword(password);
+        let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+        if(userAdded){
+            res.json({body: JSON.stringify(req.body), status: "success"});
         } else {
-            res.json({status: "username exist"});
+            res.json({status: "failed to add user"});
         }
+    } else {
+        res.json({status: "username exist"});
     }
-    else res.status(400).send("Please fill out all available fields." + JSON.stringify(req.body));
+};
+
+const registrationValidation = (req, res, next) => {
+    // body not empty validation
+    body(['username', 'password', 'first_name', 'last_name']).notEmpty();
+
+    // first_name and last_name length validation
+    body(['first_name', 'last_name']).isLength({
+        min: 3,
+        max: 50
+    })
+
+    // username is email validation
+    body('username').isEmail();
+
+    // password length validation
+    body('password').isLength({
+        min: 6,
+        max: 20
+    })
+
+    // check for errors
+    const errors = validationResult(req);
+    // if errors exist show them as they appear
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    // go to next middleware
+    next();
 };
 
 
@@ -573,7 +598,7 @@ app.put('/revoke-user-permissions/:uid', revokeUserPermission);
 app.delete('/delete-user/:uid', deleteUser);
 
 //====== User Routes ======
-app.post('/register', register);
+app.post('/register', registrationValidation, register);
 app.post('/login', login);
 app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
