@@ -104,6 +104,22 @@ async function dbInit(){
     dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
         exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
 
+    // TODO: Please add a boolean field for user email verification status
+    // TODO: Find user by email and return value of email verification status
+    dbApi.getEmailVerificationStatus = (username) => {
+        return true;
+    }
+
+    // TODO: Find user by email and update the email verification status to true
+    dbApi.verifyEmail = (username) => {
+        return true
+    }
+
+    // TODO: Search database for user with token and return username on success and empty string on failure
+    dbApi.getUserByToken = (emailLinkToken) => {
+        return "username";
+    }
+
     dbApi.loginUser = (username, hashedPassword) => {
         // Generate token
         const token = jwt.sign(
@@ -403,13 +419,35 @@ const registrationValidation = (req, res, next) => {
     next();
 };
 
+const verifyEmail = async (req, res) => {
+    // extract the email verification token from the path parameters
+    const { emailLinkToken } = req.params;
+
+    // find the user in the database with user's token value
+    let username = dbApi.getUserByToken(emailLinkToken);
+    if(username === "") {
+        res.status(401).send("Invalid token!");
+    }
+
+    // update the the user's email verification status
+    let verified = dbApi.verifyEmail(username);
+
+    res.status(200).send(JSON.stringify(verified));
+};
 
 const login = async (req, res) => {
     const { username, password } = req.body;
     console.log('Logging in user: ' + JSON.stringify(username));
-    console.log('Password: ' +JSON.stringify(password));
-    console.log('Body: ' +JSON.stringify(req.body));
+    console.log('Password: ' + JSON.stringify(password));
+    console.log('Body: ' + JSON.stringify(req.body));
     if (username && password) {
+        let emailVerified = dbApi.getEmailVerificationStatus(username);
+        if(!emailVerified) {
+            res.status(403).send({
+                error: "Please check your email and verify your account before logging in.",
+            });
+        }
+
         let uid = await dbApi.userNameExists(username);
         if(uid) {
             let hashedPassword = hashPassword(password);
@@ -599,6 +637,7 @@ app.delete('/delete-user/:uid', deleteUser);
 
 //====== User Routes ======
 app.post('/register', registrationValidation, register);
+app.put('/verify-email/:emailLinkToken', verifyEmail);
 app.post('/login', login);
 app.get('/logout/:uid', logout);
 app.post('/forgot-password', forgotPassword);
