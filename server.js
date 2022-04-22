@@ -101,7 +101,8 @@ async function dbInit(){
         return -1;
     };
 
-    dbApi.addUser = (username, hashedPassword, first_name, last_name) =>
+    // TODO: Please add the token to the user table for email verification
+    dbApi.addUser = (username, hashedPassword, first_name, last_name, token) =>
         exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
 
     // TODO: Please add a boolean field for user email verification status
@@ -209,6 +210,17 @@ app.use(bodyParser.json())
 app.use(bodyParser.text({
     type: "*/*"
 }));
+
+//============ Initialize Reusable Transporter Object ============
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: "funsouschef@gmail.com",
+        pass: "qbxkvdjxjoaijmhj"
+    },
+});
 
 //============ Initialize endpoints ============
 app.get('/', async (req, res) => {
@@ -378,7 +390,34 @@ const register = async (req, res) => {
     //============== Check if the username is already taken =============== //
     if(!(await dbApi.userNameExists(username))) {
         let hashedPassword = hashPassword(password);
-        let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name);
+
+        // generate a token
+        let token = jwt.sign(
+            { username: username, dateCreated: Date.now()},
+            JWT_PASSPHRASE
+        );
+
+        // add user with generated token
+        let userAdded = dbApi.addUser(username, hashedPassword, first_name, last_name, token);
+
+        // construct email
+        const emailData = {
+            from: "noreply@node-react.com",
+            to: username,
+            subject: "Account Verification Instructions",
+            text: `Please use the following link to verify your email and activate your account: ${
+                uri
+            }/verify-email/${token}`,
+            html: `<p>Please use the following link to verify your email and activate your account:</p> <p>${
+                uri
+            }/verify-email/${token}</p>`
+        };
+
+        // send mail with defined transport object
+        let info = await transporter.sendMail(emailData);
+        console.log(`An email was sent to the user with email: ${email}.`);
+        console.log(info);
+
         if(userAdded){
             res.json({body: JSON.stringify(req.body), status: "success"});
         } else {
@@ -471,32 +510,14 @@ const logout = async (req, res) => {
     } else { res.status(400).send("An error occurred attempting to log out.")}
 };
 
-// TODO: We need to replace the fake Ethereal SMTP service with a real SMTP service
-// TODO: Investigate Heroku SMTP offerings: https://devcenter.heroku.com/articles/smtp
 const forgotPassword = async (req, res) => {
     let { email } = req.body;
     let token = generateTempPassword();
     await dbApi.updatePassword(email, token);
 
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    let testAccount = await nodemailer.createTestAccount();
-
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
-        },
-    });
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
+    const emailData = {
         // sender address
-        from: 'robertpomichter@yahoo.com',
+        from: 'noreply@node-react.com',
         // list of receivers
         to: `${email}`,
         // Subject line
@@ -509,7 +530,10 @@ const forgotPassword = async (req, res) => {
         html: `<p>Please use the following link to reset your password:</p> <p>${
             uri
         }/update-password/${token}</p>`
-    });
+    }
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail(emailData);
 
     console.log(`An email was sent to the user with email: ${email}.`);
     console.log(info);
