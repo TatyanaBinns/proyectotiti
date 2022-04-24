@@ -101,24 +101,27 @@ async function dbInit(){
         return -1;
     };
 
-    // TODO: Please add the token to the user table for email verification
     dbApi.addUser = (username, hashedPassword, first_name, last_name, token) =>
-        exec("INSERT INTO users (username, password_hash, first_name, last_name) VALUES($1, $2, $3, $4);", [username, hashedPassword, first_name, last_name]);
+        exec("INSERT INTO users (username, password_hash, first_name, last_name, contacttoken) VALUES($1, $2, $3, $4, $5);", [username, hashedPassword, first_name, last_name, token]);
 
-    // TODO: Please add a boolean field for user email verification status
-    // TODO: Find user by email and return value of email verification status
+    // Find user by email and return value of email verification status
     dbApi.getEmailVerificationStatus = (username) => {
-        return true;
+        var res = exec("SELECT emailVerified FROM users WHERE username=$1", [username]);
+        if(res.length > 0)
+            return res["emailVerified"];
+        return false;
     }
 
-    // TODO: Find user by email and update the email verification status to true
-    dbApi.verifyEmail = (username) => {
-        return true
-    }
+    // Find user by email and update the email verification status to true
+    dbApi.verifyEmail = (username) =>
+        exec("UPDATE users SET emailVerified=true WHERE username=$1", [username]);
 
-    // TODO: Search database for user with token and return username on success and empty string on failure
+    // Search database for user with token and return username on success and empty string on failure
     dbApi.getUserByToken = (emailLinkToken) => {
-        return "username";
+        var res = exec("SELECT username FROM users WHERE contacttoken=$1", [emailLinkToken]);
+        if(res.length > 0)
+            return res["username"];
+        return "";
     }
 
     dbApi.loginUser = (username, hashedPassword) => {
