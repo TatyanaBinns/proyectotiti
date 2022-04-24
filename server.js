@@ -469,6 +469,7 @@ const verifyEmail = async (req, res) => {
     let username = dbApi.getUserByToken(emailLinkToken);
     if(username === "") {
         res.status(401).send("Invalid token!");
+        return;
     }
 
     // update the the user's email verification status
